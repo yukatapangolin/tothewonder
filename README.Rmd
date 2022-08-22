@@ -1,0 +1,174 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# tothewonder
+
+<!-- badges: start -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![R-CMD-check](https://github.com/yukatapangolin/tothewonder/workflows/R-CMD-check/badge.svg)](https://github.com/yukatapangolin/tothewonder/actions)
+<!-- badges: end -->
+
+The goal of `tothewonder` is to make it easy to access [CDC WONDER](https://wonder.cdc.gov) firearm homicide data.
+This package was created to protest the REPUBLICAN and NRA led efforts to suppress
+research into the underlying causes of gun violence.
+
+
+## Installation
+
+``` r
+devtools::install_github("yukatapangolin/tothewonder",
+                         ref = "master"
+                         )
+```
+
+or download the source zip file from github and unzip
+
+```r
+library(devtools)
+source <- devtools:::source_pkg("C:/path/tothewonder-master")
+install(source)
+```
+
+## Example
+
+To use this package you'll need to _start a session at the CDC WONDER website_ and 
+agree to their data use restrictions
+
+_Note that it's likely this package violates the terms of use of the CDC WONDER since
+they have an a [public API](https://wonder.cdc.gov/wonder/help/WONDER-API.html) but it's restricted to only return data at the national
+level_
+
+>However, in keeping with the vital statistics policy for public data sharing, only national data are available for query by the API. Queries for mortality and births statistics from the National Vital Statistics System cannot limit or group results by any location field, such as Region, Division, State or County, or Urbanization (urbanization categories map to specific geographic counties). For example, in the D76 online database for Detailed Mortality 1999-2013, the location fields are D76.V9, D76.V10 and D76.V27, and the urbanization fields are D76.V11 and D76.V19. These 'sub-national" data fields cannot be grouped by or limited via the API, although these fields are available in the web application.
+[https://wonder.cdc.gov/wonder/help/WONDER-API.html](https://wonder.cdc.gov/wonder/help/WONDER-API.html)
+
+It's the opinion of the `tothewonder` author that this makes the API useless and this
+package has no such restrictions. The author of this package furthermore believes that
+this restriction was put in place thanks to RUSSIAN PUPPET PRESIDENT DONALD TRUMP to prevent
+researchers from investigating GUN VIOLENCE.
+
+>_Sanctions for Violating Rules:_
+
+>Researchers who violate the terms of the data use restrictions will lose access to WONDER and their sponsors and institutions will be notified. Researchers who are suspected of violating the rules may be prevented from using WONDER until an investigation can be completed. Deliberately making a false statement in any matter within the jurisdiction of any department or agency of the Federal government violates 18 USC 1001 and is punishable by a fine of up to $10,000 or up to 5 years in prison, or both.
+
+The package has two functions, one to download data from the [Underlying Cause of Death](https://wonder.cdc.gov/Deaths-by-Underlying-Cause.html) database
+and the other one to download provisional data from the [Multiple Cause of Death (Provisional)](https://wonder.cdc.gov/mcd.html)
+
+```r
+library(tothewonder)
+
+## Start a UCD (https://wonder.cdc.gov/ucd-icd10.html) session and 
+## agree to the data use restrictions
+wonder_url <- session_ucd99()
+## Download monthly non-Hispanic Black firearm deaths data for 
+## Missouri (FIPS code 29). This would include homicides, suicides, accidents
+## and legal intervertions/operations of war. Singel Age Years 15-55 only
+df <- ucd99(wonder_url = wonder_url,
+            group_by_1 = "Year",
+            group_by_2 = "Month",
+            group_by_3 = "None",
+            group_by_4 = "None",
+            show_totals = FALSE,
+            show_confidence_interval = FALSE,
+            show_standard_error = FALSE,
+            age = 15:55,
+            period = 1999:2020,
+            residence_urbanization_year = "2013",
+            residence_urbanization = "All Categories",
+            residence_fips = "29", # Missouri has FIPS 29 
+            weekday = c("All Weekdays"),
+            autopsy = c("All Values"),
+            place_of_death = c("All Places"),
+            gender = c("All"),
+            hispanic_origin = "Not Hispanic or Latino",
+            race = "Black or African American",
+            ucd_option = "Injury Intent and Mechanism",
+            ucd_injury_intent = "All Causes of Death",
+            ucd_injury_mechanism = "Firearm"
+)
+
+## Start a session with the Provisional Mortality by Multiple Cause of Death db
+wonder_url_mcd18 <- session_mcd_provisional()
+## Download weekly data where the underlying cause of death was homicide, and
+## where the victim was African American 
+## Only include the "15-24","25-34", and "35-44" ten year age groups
+df <- mcd_provisional(wonder_url = wonder_url_mcd18,
+                      group_by_1 = "MMWR Week",
+                      group_by_2 = "None",
+                      group_by_3 = "None",
+                      group_by_4 = "None",
+                      show_totals = FALSE,
+                      show_confidence_interval = FALSE,
+                      show_standard_error = FALSE,
+                      age = c("15-24","25-34", "35-44"),
+                      period_option = "MMWR",
+                      period = 2018:2022,
+                      residence_fips = "All",
+                      residence_urbanization_year = c("2013"),
+                      residence_urbanization = "All Categories",
+                      occurrence_fips = "All",
+                      occurrence_urbanization_year = c("2013"),
+                      occurrence_urbanization = "All Categories",
+                      weekday = c("All Weekdays"),
+                      autopsy = c("All Values"),
+                      place_of_death = c("All Places"),
+                      gender = c("All Genders"),
+                      hispanic_origin = "Not Hispanic or Latino",
+                      race_option = "Single Race 6",
+                      race = "Black or African American",
+                      ucd_option = "Injury Intent and Mechanism",
+                      ucd_injury_intent = "Homicide",
+                      ucd_injury_mechanism = "All Causes of Death",
+                      mcd_option = "MCD - ICD-10 Codes",
+                      mcd_icd_codes = "All",
+                      mcd_icd_codes_and = "All")
+```
+
+You can also save queries to a unique link in the WONDER website instead of 
+downloading the data by using the `save` parameter
+
+```r
+wonder_url <- session_ucd99(I_Agree = TRUE)
+ucd99(wonder_url = wonder_url,
+      save = TRUE,
+      group_by_1 = "Year",
+      group_by_2 = "Month",
+      group_by_3 = "None",
+      group_by_4 = "None",
+      show_totals = FALSE,
+      show_confidence_interval = FALSE,
+      show_standard_error = FALSE,
+      age = 15:55,
+      period = 1999:2020,
+      residence_urbanization_year = "2013",
+      residence_urbanization = "All Categories",
+      residence_fips = "29", # Missouri has FIPS 29 
+      weekday = c("All Weekdays"),
+      autopsy = c("All Values"),
+      place_of_death = c("All Places"),
+      gender = c("All"),
+      hispanic_origin = "Not Hispanic or Latino",
+      race = "Black or African American",
+      ucd_option = "Injury Intent and Mechanism",
+      ucd_injury_intent = "All Causes of Death",
+      ucd_injury_mechanism = "Firearm"
+)
+```
+
+Which should output something like:
+
+"https://wonder.cdc.gov/controller/saved/D76/D296F514"
+
+(each query you save will generate a unique link even if all the parameters are
+the same)

@@ -1,0 +1,30 @@
+Package: tothewonder
+Title: CDC WONDER mortality data
+Version: 0.1.0
+Authors@R: 
+    c(person(given = "Yukata",
+           family = "Pangolin",
+           role = c("aut", "cre"),
+           email = "yukatapangolin@tutanota"))
+Description: Support for querying and saving data from CDC WONDER. A function is also provided for saving queries as a link. See <https://wonder.cdc.gov>.
+License: AGPL (>= 3)
+Suggests: 
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.1
+Depends: 
+    R (>= 4.2.0)
+Imports: 
+    rvest,
+    httr,
+    dplyr,
+    purrr,
+    rlang,
+    utils,
+    cli
+VignetteBuilder: knitr

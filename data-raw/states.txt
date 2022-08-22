@@ -1,0 +1,97 @@
+"Notes"	"State"	"State Code"	Deaths	Population	Crude Rate
+	"Alabama"	"01"	1087306	103604166	1049.5
+	"Alaska"	"02"	82025	15300884	536.1
+	"Arizona"	"04"	1091130	138079425	790.2
+	"Arkansas"	"05"	658885	63181817	1042.8
+	"California"	"06"	5433709	815706063	666.1
+	"Colorado"	"08"	724195	110389320	656.0
+	"Connecticut"	"09"	663466	77711442	853.8
+	"Delaware"	"10"	174980	19532241	895.9
+	"District of Columbia"	"11"	115254	13636649	845.2
+	"Florida"	"12"	3986872	413765419	963.6
+	"Georgia"	"13"	1616247	209381012	771.9
+	"Hawaii"	"15"	218690	29491292	741.5
+	"Idaho"	"16"	259274	33894011	765.0
+	"Illinois"	"17"	2333695	279233480	835.8
+	"Indiana"	"18"	1307171	141518257	923.7
+	"Iowa"	"19"	635017	66861208	949.8
+	"Kansas"	"20"	563214	62051541	907.7
+	"Kentucky"	"21"	954444	94374176	1011.3
+	"Louisiana"	"22"	950499	100136377	949.2
+	"Maine"	"23"	292038	29046732	1005.4
+	"Maryland"	"24"	1011888	126308636	801.1
+	"Massachusetts"	"25"	1231884	144921428	850.0
+	"Michigan"	"26"	2012649	219087039	918.7
+	"Minnesota"	"27"	889297	116354336	764.3
+	"Mississippi"	"28"	663891	64598559	1027.7
+	"Missouri"	"29"	1269606	130170885	975.3
+	"Montana"	"30"	201101	21654987	928.7
+	"Nebraska"	"31"	348297	40077995	869.0
+	"Nevada"	"32"	450858	57588193	782.9
+	"New Hampshire"	"33"	239722	28800092	832.4
+	"New Jersey"	"34"	1613200	192409809	838.4
+	"New Mexico"	"35"	362612	43978024	824.5
+	"New York"	"36"	3413835	425850343	801.7
+	"North Carolina"	"37"	1791385	205681896	870.9
+	"North Dakota"	"38"	134991	15194827	888.4
+	"Ohio"	"39"	2502638	253609029	986.8
+	"Oklahoma"	"40"	826665	81770584	1011.0
+	"Oregon"	"41"	726364	83915155	865.6
+	"Pennsylvania"	"42"	2873770	277318500	1036.3
+	"Rhode Island"	"44"	218652	23261764	940.0
+	"South Carolina"	"45"	944896	100679830	938.5
+	"South Dakota"	"46"	162789	17936581	907.6
+	"Tennessee"	"47"	1364086	138146823	987.4
+	"Texas"	"48"	3823245	548904814	696.5
+	"Utah"	"49"	337132	59820399	563.6
+	"Vermont"	"50"	119892	13674812	876.7
+	"Virginia"	"51"	1360056	173946516	781.9
+	"Washington"	"53"	1100969	147569534	746.1
+	"West Virginia"	"54"	482560	40168566	1201.3
+	"Wisconsin"	"55"	1080892	124026036	871.5
+	"Wyoming"	"56"	98408	12035143	817.7
+"Total"			56806341	6746356647	842.0
+"---"
+"Dataset: Underlying Cause of Death, 1999-2020"
+"Query Parameters:"
+"Group By: State"
+"Show Totals: True"
+"Show Zero Values: False"
+"Show Suppressed: False"
+"Calculate Rates Per: 100,000"
+"Rate Options: Default intercensal populations for years 2001-2009 (except Infant Age Groups)"
+"---"
+"Help: See http://wonder.cdc.gov/wonder/help/ucd.html for more information."
+"---"
+"Query Date: May 28, 2022 10:05:34 PM"
+"---"
+"Suggested Citation: Centers for Disease Control and Prevention, National Center for Health Statistics. National Vital Statistics"
+"System, Mortality 1999-2020 on CDC WONDER Online Database, released in 2021. Data are from the Multiple Cause of Death Files,"
+"1999-2020, as compiled from data provided by the 57 vital statistics jurisdictions through the Vital Statistics Cooperative"
+"Program. Accessed at http://wonder.cdc.gov/ucd-icd10.html on May 28, 2022 10:05:34 PM"
+"---"
+Caveats:
+"1. As of April 3, 2017, the underlying cause of death has been revised for 125 deaths in 2014. More information:"
+"http://wonder.cdc.gov/wonder/help/ucd.html#2014-Revision."
+"2. The population figures for year 2020 are bridged-race estimates of the July 1 resident population, from the Vintage 2020"
+"postcensal series released by NCHS on September 22, 2021. The population figures for year 2019 are bridged-race estimates of the"
+"July 1 resident population, from the Vintage 2019 postcensal series released by NCHS on July 9, 2020. The population figures for"
+"year 2018 are bridged-race estimates of the July 1 resident population, from the Vintage 2018 postcensal series released by NCHS"
+"on June 25, 2019. The population figures for year 2017 are bridged-race estimates of the July 1 resident population, from the"
+"Vintage 2017 postcensal series released by NCHS on June 27, 2018. The population figures for year 2016 are bridged-race"
+"estimates of the July 1 resident population, from the Vintage 2016 postcensal series released by NCHS on June 26, 2017. The"
+"population figures for year 2015 are bridged-race estimates of the July 1 resident population, from the Vintage 2015 postcensal"
+"series released by NCHS on June 28, 2016. The population figures for year 2014 are bridged-race estimates of the July 1 resident"
+"population, from the Vintage 2014 postcensal series released by NCHS on June 30, 2015. The population figures for year 2013 are"
+"bridged-race estimates of the July 1 resident population, from the Vintage 2013 postcensal series released by NCHS on June 26,"
+"2014. The population figures for year 2012 are bridged-race estimates of the July 1 resident population, from the Vintage 2012"
+"postcensal series released by NCHS on June 13, 2013. The population figures for year 2011 are bridged-race estimates of the July"
+"1 resident population, from the Vintage 2011 postcensal series released by NCHS on July 18, 2012. Population figures for 2010"
+"are April 1 Census counts. The population figures for years 2001 - 2009 are bridged-race estimates of the July 1 resident"
+"population, from the revised intercensal county-level 2000 - 2009 series released by NCHS on October 26, 2012. Population"
+"figures for 2000 are April 1 Census counts. Population figures for 1999 are from the 1990-1999 intercensal series of July 1"
+"estimates. Population figures for the infant age groups are the number of live births. <br/><b>Note:</b> Rates and population"
+"figures for years 2001 - 2009 differ slightly from previously published reports, due to use of the population estimates which"
+"were available at the time of release."
+"3. The population figures used in the calculation of death rates for the age group 'under 1 year' are the estimates of the"
+"resident population that is under one year of age. More information: http://wonder.cdc.gov/wonder/help/ucd.html#Age Group."

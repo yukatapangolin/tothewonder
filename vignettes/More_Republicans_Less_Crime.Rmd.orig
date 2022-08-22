@@ -1,0 +1,280 @@
+---
+title: "More Republicans, Fewer Black Homicides"
+output: rmarkdown::html_vignette
+fig_width: 7
+fig_height: 4
+vignette: >
+  %\VignetteIndexEntry{More Republicans, Fewer Black Homicides}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width=9, fig.height=6, dpi=100,
+  fig.path = './figures/trump-'
+)
+```
+
+```{r}
+# wonder_url <- tothewonder:::session_ucd99()
+```
+
+```{r, include=FALSE}
+wonder_url <- tothewonder::session_ucd99(I_Agree = TRUE)
+```
+
+Download 2020 results by county
+
+```{r setup, cache=TRUE}
+library(tothewonder)
+library(ggplot2)
+library(scales)
+library(dplyr)
+library(purrr)
+library(usmap)
+
+# file with the election results, I used the one from:
+# https://github.com/tonmcg/US_County_Level_Election_Results_08-20
+#
+# Need to read FIPS code column as character to preserve leading zero
+trump_2020 <- read.csv("https://raw.githubusercontent.com/yukatapangolin/US_County_Level_Election_Results_08-20/master/2020_US_County_Level_Presidential_Results.csv",
+                       colClasses = c("character", "character",
+                                      "character", "integer",
+                                      "integer", "integer",
+                                      "integer", "numeric",
+                                      "numeric", "numeric"))
+trump_2020$winner <- ifelse(trump_2020$per_gop > trump_2020$per_dem, "Trump", "Biden")
+trump_2020$margins <- cut(trump_2020$per_point_diff,
+                          c(-1, -.6, -.4, -.2, 0, .2, .4, .6, 1),
+                          labels = NULL,
+                          ordered_result = TRUE)
+
+trump_2020 <- subset(trump_2020, state_name != "Alaska")
+# Shannon County (46113) became Oglala Lakota County (46102) in 2015 and
+# WONDER doesn't know about the new FIPS code
+# https://en.wikipedia.org/wiki/Oglala_Lakota_County,_South_Dakota
+trump_2020$county_fips[which(trump_2020$county_fips == 46102)] <- 46113
+```
+
+Map of Trump vote margins
+
+```{r trump-map}
+trump_2020$fips <- trump_2020$county_fips
+plot_usmap(regions = "counties", data = trump_2020, values = "margins") +
+  scale_fill_brewer(palette = "RdBu", direction = -1)
+```
+
+```{r variables, cache=TRUE}
+get_rates_by_margin <- function(wonder_url,
+                                df_election,
+                                hispanic_origin = "Not Hispanic or Latino",
+                                race = "White",
+                                injury_intent = "Homicide",
+                                injury_mechanism = "All Causes of Death") {
+  homicide_rates <- data.frame()
+  for (margin in unique(df_election$margins)) {
+    counties <- unique(subset(df_election, margins == margin))$county_fips
+    df <- ucd99(wonder_url = wonder_url,
+                group_by_1 = "Year",
+                group_by_2 = "None",
+                group_by_3 = "None",
+                group_by_4 = "None",
+                show_confidence_interval = TRUE,
+                show_standard_error = FALSE,
+                age = "All Ages",
+                period = 2016:2020,
+                residence_urbanization_year = "2013",
+                residence_urbanization = "All Categories",
+                residence_fips = counties,
+                weekday = c("All Weekdays"),
+                autopsy = c("All Values"),
+                place_of_death = c("All Places"),
+                gender = c("All"),
+                hispanic_origin = hispanic_origin,
+                race = race,
+                ucd_option = "Injury Intent and Mechanism",
+                ucd_injury_intent = injury_intent,
+                ucd_injury_mechanism = injury_mechanism
+    )
+    ## Check that the CDC data has got all the counties
+    for (FIPS in counties)
+      ## District of Columbia, 11001 FIPS Code, is a special case
+      ## The CDC uses only the state code "11"
+      if (FIPS == "11001") {
+        FIPS <- "\\(11\\)"
+        if(!any(grepl(FIPS, df$Notes)))
+          stop("Missing a county")
+      }
+    ## Check that no extra counties were included
+    for (FIPS in setdiff(df_election$county_fips, counties))
+      if(any(grepl(FIPS, df$Notes)))
+        stop("There's an extra a county")
+    df$trump_margin <- margin
+    homicide_rates <- rbind(homicide_rates, df)
+  }
+  return(homicide_rates)
+}
+
+black_homicide_rates <- get_rates_by_margin(wonder_url,
+                                            trump_2020,
+                                            hispanic_origin = "Not Hispanic or Latino",
+                                            race = "Black or African American",
+                                            injury_intent = "Homicide",
+                                            injury_mechanism = "All Causes of Death")
+white_homicide_rates <- get_rates_by_margin(wonder_url,
+                                            trump_2020,
+                                            hispanic_origin = "Not Hispanic or Latino",
+                                            race = "White",
+                                            injury_intent = "Homicide",
+                                            injury_mechanism = "All Causes of Death")
+hispanic_homicide_rates <- get_rates_by_margin(wonder_url,
+                                               trump_2020,
+                                               hispanic_origin = "Hispanic or Latino",
+                                               race = "White",
+                                               injury_intent = "Homicide",
+                                               injury_mechanism = "All Causes of Death")
+```
+
+```{r query_WONDER}
+
+white_homicide_rates$race <- "White"
+hispanic_homicide_rates$race <- "Hispanic"
+black_homicide_rates$race <- "Black"
+homicide_rates <- rbind(black_homicide_rates,
+                        white_homicide_rates,
+                        hispanic_homicide_rates)
+```
+
+
+```{r cleanup}
+# Get rid of all the 'Query Parameters' stuff the CDC adds
+homicide_rates <- dplyr::filter(homicide_rates,
+                                !is.na(homicide_rates$Year))
+homicide_rates$trump_margin <- factor(homicide_rates$trump_margin,
+                                      levels = levels(trump_2020$margins),
+                                      ordered = TRUE)
+homicide_rates$winner <- ifelse(grepl("-", homicide_rates$trump_margin),
+                                "Biden", "Trump")
+homicide_rates$facet <-  dplyr::case_when(
+  homicide_rates$trump_margin == "(-1,-0.6]" |
+    homicide_rates$trump_margin == "(0.6,1]" ~
+    "counties won by\n60 percent or more",
+  homicide_rates$trump_margin == "(0.4,0.6]" |
+    homicide_rates$trump_margin == "(-0.6,-0.4]" ~
+    "counties won by\n40 - 60 percent",
+  homicide_rates$trump_margin == "(0.2,0.4]" |
+    homicide_rates$trump_margin == "(-0.4,-0.2]" ~
+    "counties won by\n20 - 40 percent",
+  homicide_rates$trump_margin == "(-0.2,0]" |
+    homicide_rates$trump_margin == "(0,0.2]" ~
+    "counties won by\n0 - 20 percent"
+)
+```
+
+
+Black homicide rates by vote margin
+
+```{r trump_vote_homicides}
+ggplot(subset(homicide_rates, Year %in% 2019:2020 & race == "Black"),
+       aes(Year, Crude.Rate, group = trump_margin, color = winner)) +
+  geom_line(size = 1) +
+  geom_errorbar(aes(ymin = Crude.Rate.Lower.95..Confidence.Interval,
+                    ymax = Crude.Rate.Upper.95..Confidence.Interval),
+                width = .15) +
+  facet_wrap(~ facet, ncol = 4) +
+  labs(title = "African American Homicide Rates by Election Results",
+       subtitle = "Counties that went heavily for Donald Trump have had much smaller homicide increases.",
+       caption = "Source: CDC WONDER. Excludes Alaska") +
+  scale_color_manual("vote winner", values = rep(c("#244999", "#d22532"), 6)) +
+  expand_limits(y = 0) +
+  ylab("homicide rate") +
+  scale_y_continuous(breaks = breaks_pretty()) +
+  scale_x_continuous(breaks = 2019:2020, limits = c(2018.5, 2020.5))
+```
+
+Log Change in Rates
+
+```{r trump_vote_homicide_change}
+homicide_rates_change <- homicide_rates |>
+  group_by(trump_margin, winner, race) |>
+  summarise(rate_change = Crude.Rate[Year == 2020] - Crude.Rate[Year == 2019],
+            .groups = "drop_last")
+labels <- c("(-1,-0.6]" = "-100% to -60%",
+            "(-0.6,-0.4]" = "-60% to -40%",
+            "(-0.4,-0.2]" = "-40% to -20%",
+            "(-0.2,0]" = "-20% to 0%",
+            "(0,0.2]" = "0% to 20%",
+            "(0.2,0.4]" = "20% to 40%",
+            "(0.4,0.6]" = "40% to 60%",
+            "(0.6,1]" = "60 to 100%")
+
+ggplot(homicide_rates_change, aes(trump_margin, rate_change)) +
+  geom_point(size = 4, aes(color = winner)) +
+  geom_smooth(aes(as.numeric(trump_margin, fill = "red"), rate_change),
+              method = "lm",
+              formula = 'y ~ x') +
+  expand_limits(y = 0) +
+  scale_color_manual(values = c(
+    "#244999",
+    "#d22532"
+  )) +
+  xlab("Trump margin (%)") +
+  ylab("Pseudo Logarithm (Rate increase)") +
+  theme(panel.grid.major.x = element_blank()) +
+  labs(title = "Change in Homicide Rates by Trump Vote Margin",
+       subtitle = "Blacks and Hispanics in counties won by Donald Trump experienced smaller homicide increases. Excludes Alaska",
+       caption = "Source: CDC WONDER 1999-2020: Underlying Cause of Death by Bridged-Race Categories") +
+  ## https://win-vector.com/2012/03/01/modeling-trick-the-signed-pseudo-logarithm/
+  scale_y_continuous(trans = "pseudo_log",
+                     limits = c(-1, 15)) +
+  scale_x_discrete(
+    labels = labels,
+    guide = guide_axis(angle = 30)) +
+  theme(plot.subtitle=element_text(size = 16)) +
+  facet_wrap(~ race)
+```
+
+Percent Change
+
+```{r percent_change}
+homicide_rates_change <- homicide_rates |>
+  group_by(trump_margin, winner, race) |>
+  summarise(rate_change = (Crude.Rate[Year == 2020] - Crude.Rate[Year == 2019]) /
+              Crude.Rate[Year == 2019],
+            .groups = "drop_last")
+
+labels <- c("(-1,-0.6]" = "-100% to -60%",
+            "(-0.6,-0.4]" = "-60% to -40%",
+            "(-0.4,-0.2]" = "-40% to -20%",
+            "(-0.2,0]" = "-20% to 0%",
+            "(0,0.2]" = "0% to 20%",
+            "(0.2,0.4]" = "20% to 40%",
+            "(0.4,0.6]" = "40% to 60%",
+            "(0.6,1]" = "60 to 100%")
+ggplot(homicide_rates_change, aes(trump_margin, rate_change)) +
+  geom_point(size = 4, aes(color = winner)) +
+  geom_smooth(aes(as.numeric(trump_margin, fill = "red"), rate_change),
+              method = "lm",
+              formula = 'y ~ x') +
+  expand_limits(y = 0) +
+  scale_color_manual(values = c(
+    "#244999",
+    "#d22532"
+  )) +
+  xlab("Trump margin (%)") +
+  ylab("Percent increase") +
+  theme(panel.grid.major.x = element_blank()) +
+  labs(title = "Percent Change in Homicide Rates by Trump Vote Margin",
+       subtitle = "Blacks and Hispanics in counties won by Donald Trump experienced smaller homicide increases. Excludes Alaska",
+       caption = "Source: CDC WONDER 1999-2020: Underlying Cause of Death by Bridged-Race Categories") +
+  ## https://win-vector.com/2012/03/01/modeling-trick-the-signed-pseudo-logarithm/
+  scale_y_continuous(labels = scales::percent) +
+  scale_x_discrete(
+    labels = labels,
+    guide = guide_axis(angle = 30)) +
+  theme(plot.subtitle=element_text(size = 16)) +
+  facet_wrap(~ race)
+```

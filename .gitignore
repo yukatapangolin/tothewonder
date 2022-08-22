@@ -1,0 +1,10 @@
+*.svg$
+*_cache
+.DS_Store
+.Rdata
+.Rhistory
+.Rproj.user
+.httr-oauth
+cache/
+data-raw/ERS10/
+inst/doc/cache

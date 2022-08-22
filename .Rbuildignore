@@ -1,0 +1,17 @@
+^.*_cache$
+^.hooks
+^LICENSE\.md$
+^README\.Rmd$
+^\.Rproj\.user$
+^\.github$
+^\.pre-commit-config.yaml$
+^\.pre-commit-config\.yaml$
+^cran-comments\.md$
+^data-raw$
+^homicides.*png$
+^homicides.*svg$
+^tothewonder\.Rproj$
+^vignettes/.*\.Rmd\.orig$
+^vignettes/.*\.md$
+^vignettes/.*cache$
+^vignettes/precompile.R$
