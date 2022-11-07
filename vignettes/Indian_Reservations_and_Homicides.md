@@ -30,7 +30,7 @@ download.file(url, paste0(tmpdir, "aiannh.tar.xz"))
 untar(paste0(tmpdir, "aiannh.tar.xz"), exdir = tmpdir )
 aiannh <- st_read(paste0(tmpdir, "/tl/", "tl_2019_us_aiannh.shp"))
 #> Reading layer `tl_2019_us_aiannh' from data source 
-#>   `/tmp/RtmpEyIr3B/tl/tl_2019_us_aiannh.shp' using driver `ESRI Shapefile'
+#>   `/tmp/RtmpzJaVER/tl/tl_2019_us_aiannh.shp' using driver `ESRI Shapefile'
 #> Simple feature collection with 848 features and 15 fields (with 6 geometries empty)
 #> Geometry type: MULTIPOLYGON
 #> Dimension:     XY
@@ -105,7 +105,12 @@ df_all <- ucd99(wonder_url = wonder_url,
                 period = 1999:2020,
                 residence_urbanization_year = "2013",
                 residence_urbanization = "All Categories",
-                residence_fips = "All",
+                residence_fips = c("01","04","05","06","08","09","10","11",
+                                   "12","13","16","17","18","19","20","21",
+                                   "22","23","24","25","26","27","28","29","30",
+                                   "31","32","33","34","35","36","37","38","39",
+                                   "40","41","42","44","45","46","47","48","49",
+                                   "50","51","53","54","55","56"),
                 weekday = c("All Weekdays"),
                 autopsy = c("All Values"),
                 place_of_death = c("All Places"),
@@ -153,7 +158,7 @@ ggplot(rbind(df_reservation, df_exclude_reservations), aes(Year, Crude.Rate,
                                                            group = type, color = type)) +
   geom_line() +
   expand_limits(y = 0) +
-  labs(title = "American Indian homicide rates in counties that contain a reservation\nand counties that don't",
+  labs(title = "1999- 2020 American Indian homicide rates in counties that contain a reservation\nand counties that don't. Lower 48 states only",
        caption = "Source: CDC WONDER")
 #> Warning: Removed 749 row(s) containing missing values (geom_path).
 ```
