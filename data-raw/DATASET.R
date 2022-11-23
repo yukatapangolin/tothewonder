@@ -3,6 +3,7 @@
 local({
   source("data-raw/DATASET_ucd.R", local = TRUE)
   source("data-raw/DATASET_icd_codes.R", local = TRUE)
+  source("data-raw/DATASET_mcod_icd_codes.R", local = TRUE)
   source("data-raw/DATASET_d_a.R", local = TRUE)
   source("data-raw/DATASET_ucd_forms.R", local = TRUE)
   source("data-raw/DATASET_mcd_forms.R", local = TRUE)
@@ -48,6 +49,7 @@ local({
     drug_alcohol_key,
     ucd_key,
     icd_codes_key,
+    mcod_icd_codes_key,
     group_by_1_opts,
     group_by_2_opts,
     urbanization_opts,

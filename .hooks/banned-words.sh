@@ -5,6 +5,7 @@ bad_words=(socks
            "subhuman trash"
            "\bkill\b"
            "fuck"
+           "rrr:::"
            "\bshit\b"
            "exterminate"
            "data-raw/ERS10/ERS-2010-2fcqzlr.tar.xz"

@@ -491,7 +491,7 @@ mcd_provisional <- function(wonder_url,
     if (any(ucd_icd_codes == "*All*(All Causes of Death)")) {
       ucd_icd_codes <- "*All*"
     }
-    check_icd_codes(ucd_icd_codes)
+    check_mcod_icd_codes(ucd_icd_codes)
   }
   opts3 <- process_ucd_mcod(
     opts3,
@@ -593,8 +593,8 @@ mcd_provisional <- function(wonder_url,
     if (any(mcd_icd_codes_and == "*All*(All Causes of Death)")) {
       mcd_icd_codes_and <- "*All*"
     }
-    check_icd_codes(mcd_icd_codes)
-    check_icd_codes(mcd_icd_codes_and)
+    check_mcod_icd_codes(mcd_icd_codes)
+    check_mcod_icd_codes(mcd_icd_codes_and)
     opts3$"V_D176.V13" <- gsub(
       "%20", "+",
       utils::URLencode(

@@ -66,7 +66,14 @@ query_wonder <- function(wurl, form_opts) {
 check_icd_codes <- function(icd_codes) {
   if (!all(icd_codes %in% c("All Causes of Death", "All", icd_codes_key))) {
     warning("Looks like you are using an ICD-10 code unknown to WONDER (https://wonder.cdc.gov/wonder/help/ucd.html#ICD-10%20Codes). This may cause the query to error.")
-    warning(setdiff(icd_codes, c(icd_codes_key)))
+    warning(paste(setdiff(icd_codes, c(icd_codes_key))))
+  }
+}
+
+check_mcod_icd_codes <- function(mcod_icd_codes) {
+  if (!all(mcod_icd_codes %in% c("All Causes of Death", "All", mcod_icd_codes_key))) {
+    warning("Looks like you are using an ICD-10 code unknown to WONDER (https://wonder.cdc.gov/wonder/help/ucd.html#ICD-10%20Codes). This may cause the query to error.")
+    warning(paste(setdiff(mcod_icd_codes, c(mcod_icd_codes_key))))
   }
 }
 
