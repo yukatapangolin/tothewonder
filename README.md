@@ -36,12 +36,14 @@ install(source)
 ### Step 1: Start a Session
 
 To use this package you’ll need to *start a session at the CDC WONDER
-website* and agree to their data use restrictions
+website* and agree to their [data use
+restrictions](https://wonder.cdc.gov/DataUse.html)
 
-*Note that it’s likely this package violates the terms of use of the CDC
-WONDER since they have a [public
-API](https://wonder.cdc.gov/wonder/help/WONDER-API.html) but it’s
-restricted to only return data at the national level*
+*Note that it’s possible this package violates the terms of use of the
+CDC WONDER website since they have a [public
+API](https://wonder.cdc.gov/wonder/help/WONDER-API.html) that’s
+restricted to only return data at the national level and this package
+allows you retrieve county-level data*
 
 > However, in keeping with the vital statistics policy for public data
 > sharing, only national data are available for query by the API.
@@ -92,10 +94,10 @@ following functions to download your data:
 ``` r
 library(tothewonder)
 
-## Start a UCD (https://wonder.cdc.gov/ucd-icd10.html) session and 
+## Start a UCD (https://wonder.cdc.gov/ucd-icd10.html) session and
 ## agree to the data use restrictions
 wonder_url <- session_ucd99()
-## Download monthly non-Hispanic Black firearm deaths data for 
+## Download monthly non-Hispanic Black firearm deaths data for
 ## Missouri (FIPS code 29). This would include homicides, suicides, accidents
 ## and legal intervertions/operations of war. Singel Age Years 15-55 only
 df <- ucd99(wonder_url = wonder_url,
@@ -110,7 +112,7 @@ df <- ucd99(wonder_url = wonder_url,
             period = 1999:2020,
             residence_urbanization_year = "2013",
             residence_urbanization = "All Categories",
-            residence_fips = "29", # Missouri has FIPS 29 
+            residence_fips = "29", # Missouri has FIPS 29
             weekday = c("All Weekdays"),
             autopsy = c("All Values"),
             place_of_death = c("All Places"),
@@ -125,7 +127,7 @@ df <- ucd99(wonder_url = wonder_url,
 ## Start a session with the Provisional Mortality by Multiple Cause of Death db
 wonder_url_mcd18 <- session_mcd_provisional()
 ## Download weekly data where the underlying cause of death was homicide, and
-## where the victim was African American 
+## where the victim was African American
 ## Only include the "15-24","25-34", and "35-44" ten year age groups
 df <- mcd_provisional(wonder_url = wonder_url_mcd18,
                       group_by_1 = "MMWR Week",
@@ -159,8 +161,8 @@ df <- mcd_provisional(wonder_url = wonder_url_mcd18,
                       mcd_icd_codes_and = "All")
 ```
 
-You can also save queries to a unique link in the WONDER website instead
-of downloading the data by using the `save` parameter
+You can also save queries to a unique link that leads to the WONDER
+website by using the `save` parameter
 
 ``` r
 wonder_url <- session_ucd99(I_Agree = TRUE)
@@ -177,7 +179,7 @@ ucd99(wonder_url = wonder_url,
       period = 1999:2020,
       residence_urbanization_year = "2013",
       residence_urbanization = "All Categories",
-      residence_fips = "29", # Missouri has FIPS 29 
+      residence_fips = "29", # Missouri has FIPS 29
       weekday = c("All Weekdays"),
       autopsy = c("All Values"),
       place_of_death = c("All Places"),
@@ -206,7 +208,11 @@ library(tothewonder)
 library(tidyverse)
 
 ## from https://github.com/tonmcg/US_County_Level_Election_Results_08-20
-trump_2020 <- read.csv("https://raw.githubusercontent.com/yukatapangolin/US_County_Level_Election_Results_08-20/585cb48ccc17fef3640db33eef952cf613c67e95/2020_US_County_Level_Presidential_Results.csv",
+url <- paste0("https://raw.githubusercontent.com/yukatapangolin/",
+               "US_County_Level_Election_Results_08-20/",
+               "585cb48ccc17fef3640db33eef952cf613c67e95/",
+               "2020_US_County_Level_Presidential_Results.csv")
+trump_2020 <- read.csv(url,
                        colClasses = c("character", "character",
                                       "character", "integer",
                                       "integer", "integer",
@@ -216,34 +222,38 @@ trump_2020$winner <- ifelse(trump_2020$per_gop > trump_2020$per_dem, "Trump", "B
 trump_2020 <- subset(trump_2020, per_gop >= .6 | per_dem >= .6)
 
 trump_2020 <- subset(trump_2020, state_name != "Alaska")
-# Shannon County (46113) became Oglala Lakota County (46102) in 2015 and
-# WONDER doesn't know about the new FIPS code
-# https://en.wikipedia.org/wiki/Oglala_Lakota_County,_South_Dakota
+## Shannon County (46113) became Oglala Lakota County (46102) in 2015 and
+## WONDER doesn't know about the new FIPS code
+## https://en.wikipedia.org/wiki/Oglala_Lakota_County,_South_Dakota
 trump_2020$county_fips[which(trump_2020$county_fips == 46102)] <- 46113
 
-wonder_url_mcod18 <- session_mcd_provisional(I_Agree = TRUE)
+wonder_url_mcod18 <- session_mcd_final18(I_Agree = TRUE)
 
 deaths <- map_dfr( unique(trump_2020$winner), .f = \(x) {
-  counties <- unique(subset(trump_2020, winner == x))$county_fips
-  df <- mcd_provisional(wonder_url = wonder_url_mcod18,
-                        save = FALSE,
-                        group_by_1 = "Year",
-                        period = 2018:2022,
-                        residence_fips = counties,
-                        ucd_option = "Injury Intent and Mechanism",
-                        ucd_injury_intent = "Homicide",
-                        ucd_injury_mechanism = "Firearm")
-  df$winner <- x
-  return(df)
+    counties <- unique(subset(trump_2020, winner == x))$county_fips
+    ## Parameters to functions use the same defaults
+    ## as the ones available at CDC WONDER and you
+    ## can omit them
+    df <- mcd_final18(wonder_url = wonder_url_mcod18,
+                      save = FALSE,
+                      group_by_1 = "Year",
+                      period = 2018:2021,
+                      residence_fips = counties,
+                      gender = "Male",
+                      ucd_option = "Injury Intent and Mechanism",
+                      ucd_injury_intent = "Homicide",
+                      ucd_injury_mechanism = "Firearm")
+    df$winner <- x
+    return(df)
 })
 
 deaths |>
   mutate(deaths = as.numeric(Deaths)) |>
   ggplot(aes(Year.Code, Crude.Rate, group = winner, color = winner)) +
   geom_line(linewidth = .9) +
-  labs(title = "Firearm Homicide Rate by 2020 Presidential Vote in County",
-       subtitle = "Counties that voted for Trump in 2020 experienced smaller homicide increases. 2021 data is provisional",
-       caption = "Source: CDC WONDER. Multiple Cause of Death Files") +
+  labs(title = "Male Firearm Homicide Rate by 2020 Presidential County Vote",
+       subtitle = "Counties that voted for Trump in 2020 experienced smaller homicide increases.",
+       caption = "Source: CDC WONDER. 2018-2021 Final Multiple Cause of Death Files") +
   expand_limits(y = 0) +
   scale_color_manual(
     values = c("#244999",
@@ -252,14 +262,18 @@ deaths |>
                "Trump won with 60%+ of the vote")
   ) +
   ylab("Rate per 100,000") +
-  xlab("Year") +
-  xlim(c(2018, 2021)) 
+  xlab("Year")
 ```
+
+![Male Firearm Homicide Rate by 2020 Presidential County
+Vote](https://yukatapangolin.github.io/images/male_firearm_homicide_vote.png)
 
 ## Packaging and Releasing
 
   - Bump the version using the bump2version command (pip install
     –upgrade bump2version).
+
+  - Update package data by running `Rscript data-raw/DATASET.R`
 
   - Run `find . -type f -exec sed...` to correct paths
 
@@ -267,3 +281,7 @@ deaths |>
     README.Rmd
 
   - Update the NEWS.md with changes.
+
+  - Tag the release `git tag v0.1.0 && git push origin --tags`
+
+  - Checkout development branch
