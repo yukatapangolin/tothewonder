@@ -1,22 +1,19 @@
----
-output: github_document
----
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
-
 
 # tothewonder
 
 <!-- badges: start -->
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/yukatapangolin/tothewonder/workflows/R-CMD-check/badge.svg)](https://github.com/yukatapangolin/tothewonder/actions)
 <!-- badges: end -->
 
-The goal of `tothewonder` is to make it easy to access [CDC WONDER](https://wonder.cdc.gov) firearm homicide data.
-This package was created to protest the REPUBLICAN and NRA led efforts to suppress
+The goal of `tothewonder` is to make it easy to access [CDC
+WONDER](https://wonder.cdc.gov) firearm homicide data. This package was
+created to protest the REPUBLICAN and NRA led efforts to suppress
 research into the underlying causes of gun violence.
-
 
 ## Installation
 
@@ -28,7 +25,7 @@ devtools::install_github("yukatapangolin/tothewonder",
 
 or download the source zip file from github and unzip
 
-```r
+``` r
 library(devtools)
 source <- devtools:::source_pkg("C:/path/tothewonder-master")
 install(source)
@@ -38,43 +35,61 @@ install(source)
 
 ### Step 1: Start a Session
 
-To use this package you'll need to _start a session at the CDC WONDER website_ and 
-agree to their data use restrictions
+To use this package you’ll need to *start a session at the CDC WONDER
+website* and agree to their data use restrictions
 
-_Note that it's likely this package violates the terms of use of the CDC WONDER since
-they have a [public API](https://wonder.cdc.gov/wonder/help/WONDER-API.html) but 
-it's restricted to only return data at the national level_
+*Note that it’s likely this package violates the terms of use of the CDC
+WONDER since they have a [public
+API](https://wonder.cdc.gov/wonder/help/WONDER-API.html) but it’s
+restricted to only return data at the national level*
 
->However, in keeping with the vital statistics policy for public data sharing, only national data are available for query by the API. Queries for mortality and births statistics from the National Vital Statistics System cannot limit or group results by any location field, such as Region, Division, State or County, or Urbanization (urbanization categories map to specific geographic counties). For example, in the D76 online database for Detailed Mortality 1999-2013, the location fields are D76.V9, D76.V10 and D76.V27, and the urbanization fields are D76.V11 and D76.V19. These 'sub-national" data fields cannot be grouped by or limited via the API, although these fields are available in the web application.
-[https://wonder.cdc.gov/wonder/help/WONDER-API.html](https://wonder.cdc.gov/wonder/help/WONDER-API.html)
+> However, in keeping with the vital statistics policy for public data
+> sharing, only national data are available for query by the API.
+> Queries for mortality and births statistics from the National Vital
+> Statistics System cannot limit or group results by any location field,
+> such as Region, Division, State or County, or Urbanization
+> (urbanization categories map to specific geographic counties). For
+> example, in the D76 online database for Detailed Mortality 1999-2013,
+> the location fields are D76.V9, D76.V10 and D76.V27, and the
+> urbanization fields are D76.V11 and D76.V19. These ’sub-national" data
+> fields cannot be grouped by or limited via the API, although these
+> fields are available in the web application.
+> <https://wonder.cdc.gov/wonder/help/WONDER-API.html>
 
-It's the opinion of the `tothewonder` author that this makes the API useless and this
-package has no such restrictions. The author of this package furthermore believes that
-this restriction was put in place thanks to RUSSIAN PUPPET PRESIDENT DONALD TRUMP to prevent
-researchers from investigating GUN VIOLENCE.
+It’s the opinion of the `tothewonder` author that this makes the API
+useless and this package has no such restrictions. The author of this
+package furthermore believes that this restriction was put in place
+thanks to RUSSIAN PUPPET PRESIDENT DONALD TRUMP to prevent researchers
+from investigating GUN VIOLENCE.
 
->_Sanctions for Violating Rules:_
+> *Sanctions for Violating Rules:*
 
->Researchers who violate the terms of the data use restrictions will lose access to WONDER and their sponsors and institutions will be notified. Researchers who are suspected of violating the rules may be prevented from using WONDER until an investigation can be completed. Deliberately making a false statement in any matter within the jurisdiction of any department or agency of the Federal government violates 18 USC 1001 and is punishable by a fine of up to $10,000 or up to 5 years in prison, or both.
+> Researchers who violate the terms of the data use restrictions will
+> lose access to WONDER and their sponsors and institutions will be
+> notified. Researchers who are suspected of violating the rules may be
+> prevented from using WONDER until an investigation can be completed.
+> Deliberately making a false statement in any matter within the
+> jurisdiction of any department or agency of the Federal government
+> violates 18 USC 1001 and is punishable by a fine of up to $10,000 or
+> up to 5 years in prison, or both.
 
 ### Step 2 - Download your Data
 
 Depending on which database you want to access you can use one of the
 following functions to download your data:
 
-`ucd99()` - [Underlying Cause of
-Death 1999-2020](https://wonder.cdc.gov/ucd-icd10.html)
+`ucd99()` - [Underlying Cause of Death
+1999-2020](https://wonder.cdc.gov/ucd-icd10.html)
 
 `mcd_provisional()` [Multiple Cause of Death 2018-Last Month
-(Provisional)]( https://wonder.cdc.gov/mcd-icd10-provisional.html)
+(Provisional)](https://wonder.cdc.gov/mcd-icd10-provisional.html)
 
 `mcd_final18()` [Multiple Cause of Death 2018-2021
 (Final)](https://wonder.cdc.gov/mcd-icd10-expanded.html)
 
-
 ## Examples
 
-```r
+``` r
 library(tothewonder)
 
 ## Start a UCD (https://wonder.cdc.gov/ucd-icd10.html) session and 
@@ -144,10 +159,10 @@ df <- mcd_provisional(wonder_url = wonder_url_mcd18,
                       mcd_icd_codes_and = "All")
 ```
 
-You can also save queries to a unique link in the WONDER website instead of 
-downloading the data by using the `save` parameter
+You can also save queries to a unique link in the WONDER website instead
+of downloading the data by using the `save` parameter
 
-```r
+``` r
 wonder_url <- session_ucd99(I_Agree = TRUE)
 ucd99(wonder_url = wonder_url,
       save = TRUE,
@@ -177,16 +192,16 @@ ucd99(wonder_url = wonder_url,
 
 Which should output something like:
 
-"https://wonder.cdc.gov/controller/saved/D76/D296F514"
+“<https://wonder.cdc.gov/controller/saved/D76/D296F514>”
 
-(each query you save will generate a unique link even if all the parameters are
-the same)
+(each query you save will generate a unique link even if all the
+parameters are the same)
 
 ## Complex Example
 
 Firearm homicide rate by county level presidential vote in 2020
 
-```r
+``` r
 library(tothewonder)
 library(tidyverse)
 
@@ -243,8 +258,12 @@ deaths |>
 
 ## Packaging and Releasing
 
-* Bump the version using the bump2version command (pip install --upgrade bump2version).
+  - Bump the version using the bump2version command (pip install
+    –upgrade bump2version).
 
-* Run `find . -type f -exec sed...` to correct paths
+  - Run `find . -type f -exec sed...` to correct paths
 
-* Update the NEWS.md with changes.
+  - Run `Rscript -e 'rmarkdown::render("README.Rmd")'` to knit
+    README.Rmd
+
+  - Update the NEWS.md with changes.

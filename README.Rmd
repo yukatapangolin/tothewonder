@@ -1,5 +1,7 @@
 ---
-output: github_document
+output:
+  github_document:
+    html_preview: false
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -253,5 +255,7 @@ deaths |>
 * Bump the version using the bump2version command (pip install --upgrade bump2version).
 
 * Run `find . -type f -exec sed...` to correct paths
+
+* Run `Rscript -e 'rmarkdown::render("README.Rmd")'` to knit README.Rmd
 
 * Update the NEWS.md with changes.
