@@ -43,12 +43,14 @@ install(source)
 
 ## Example
 
+### Step 1: Start a Session
+
 To use this package you'll need to _start a session at the CDC WONDER website_ and 
 agree to their data use restrictions
 
 _Note that it's likely this package violates the terms of use of the CDC WONDER since
-they have an a [public API](https://wonder.cdc.gov/wonder/help/WONDER-API.html) but it's restricted to only return data at the national
-level_
+they have a [public API](https://wonder.cdc.gov/wonder/help/WONDER-API.html) but 
+it's restricted to only return data at the national level_
 
 >However, in keeping with the vital statistics policy for public data sharing, only national data are available for query by the API. Queries for mortality and births statistics from the National Vital Statistics System cannot limit or group results by any location field, such as Region, Division, State or County, or Urbanization (urbanization categories map to specific geographic counties). For example, in the D76 online database for Detailed Mortality 1999-2013, the location fields are D76.V9, D76.V10 and D76.V27, and the urbanization fields are D76.V11 and D76.V19. These 'sub-national" data fields cannot be grouped by or limited via the API, although these fields are available in the web application.
 [https://wonder.cdc.gov/wonder/help/WONDER-API.html](https://wonder.cdc.gov/wonder/help/WONDER-API.html)
@@ -62,8 +64,22 @@ researchers from investigating GUN VIOLENCE.
 
 >Researchers who violate the terms of the data use restrictions will lose access to WONDER and their sponsors and institutions will be notified. Researchers who are suspected of violating the rules may be prevented from using WONDER until an investigation can be completed. Deliberately making a false statement in any matter within the jurisdiction of any department or agency of the Federal government violates 18 USC 1001 and is punishable by a fine of up to $10,000 or up to 5 years in prison, or both.
 
-The package has two functions, one to download data from the [Underlying Cause of Death](https://wonder.cdc.gov/Deaths-by-Underlying-Cause.html) database
-and the other one to download provisional data from the [Multiple Cause of Death (Provisional)](https://wonder.cdc.gov/mcd.html)
+### Step 2 - Download your Data
+
+Depending on which database you want to access you can use one of the
+following functions to download your data:
+
+`ucd99()` - [Underlying Cause of
+Death 1999-2020](https://wonder.cdc.gov/ucd-icd10.html)
+
+`mcd_provisional()` [Multiple Cause of Death 2018-Last Month
+(Provisional)]( https://wonder.cdc.gov/mcd-icd10-provisional.html)
+
+`mcd_final18()` [Multiple Cause of Death 2018-2021
+(Final)](https://wonder.cdc.gov/mcd-icd10-expanded.html)
+
+
+## Examples
 
 ```r
 library(tothewonder)
@@ -172,3 +188,70 @@ Which should output something like:
 
 (each query you save will generate a unique link even if all the parameters are
 the same)
+
+## Complex Example
+
+Firearm homicide rate by county level presidential vote in 2020
+
+```r
+library(tothewonder)
+library(tidyverse)
+
+## from https://github.com/tonmcg/US_County_Level_Election_Results_08-20
+trump_2020 <- read.csv("https://raw.githubusercontent.com/yukatapangolin/US_County_Level_Election_Results_08-20/585cb48ccc17fef3640db33eef952cf613c67e95/2020_US_County_Level_Presidential_Results.csv",
+                       colClasses = c("character", "character",
+                                      "character", "integer",
+                                      "integer", "integer",
+                                      "integer", "numeric",
+                                      "numeric", "numeric"))
+trump_2020$winner <- ifelse(trump_2020$per_gop > trump_2020$per_dem, "Trump", "Biden")
+trump_2020 <- subset(trump_2020, per_gop >= .6 | per_dem >= .6)
+
+trump_2020 <- subset(trump_2020, state_name != "Alaska")
+# Shannon County (46113) became Oglala Lakota County (46102) in 2015 and
+# WONDER doesn't know about the new FIPS code
+# https://en.wikipedia.org/wiki/Oglala_Lakota_County,_South_Dakota
+trump_2020$county_fips[which(trump_2020$county_fips == 46102)] <- 46113
+
+wonder_url_mcod18 <- session_mcd_provisional(I_Agree = TRUE)
+
+deaths <- map_dfr( unique(trump_2020$winner), .f = \(x) {
+  counties <- unique(subset(trump_2020, winner == x))$county_fips
+  df <- mcd_provisional(wonder_url = wonder_url_mcod18,
+                        save = FALSE,
+                        group_by_1 = "Year",
+                        period = 2018:2022,
+                        residence_fips = counties,
+                        ucd_option = "Injury Intent and Mechanism",
+                        ucd_injury_intent = "Homicide",
+                        ucd_injury_mechanism = "Firearm")
+  df$winner <- x
+  return(df)
+})
+
+deaths |>
+  mutate(deaths = as.numeric(Deaths)) |>
+  ggplot(aes(Year.Code, Crude.Rate, group = winner, color = winner)) +
+  geom_line(linewidth = .9) +
+  labs(title = "Firearm Homicide Rate by 2020 Presidential Vote in County",
+       subtitle = "Counties that voted for Trump in 2020 experienced smaller homicide increases. 2021 data is provisional",
+       caption = "Source: CDC WONDER. Multiple Cause of Death Files") +
+  expand_limits(y = 0) +
+  scale_color_manual(
+    values = c("#244999",
+               "#d22532"),
+    labels = c("Biden won with 60%+ of the vote",
+               "Trump won with 60%+ of the vote")
+  ) +
+  ylab("Rate per 100,000") +
+  xlab("Year") +
+  xlim(c(2018, 2021)) 
+```
+
+## Packaging and Releasing
+
+* Bump the version using the bump2version command (pip install --upgrade bump2version).
+
+* Run `find . -type f -exec sed...` to correct paths
+
+* Update the NEWS.md with changes.
