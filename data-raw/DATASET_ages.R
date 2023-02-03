@@ -1,6 +1,6 @@
 
 
-ten_year_age_groups_key <- c(
+TEN_YEAR_AGE_GROUPS_KEY <- c(
   "All Ages" = "*All*",
   "< 1" = "1",
   "1-4" = "1-4",
@@ -15,9 +15,9 @@ ten_year_age_groups_key <- c(
   "85+" = "85+",
   "Not Stated" = "NS"
 )
-ten_year_age_groups_opts <- names(ten_year_age_groups_key)
+TEN_YEAR_AGE_GROUPS_OPTS <- names(TEN_YEAR_AGE_GROUPS_KEY)
 
-five_year_age_groups_key <- c(
+FIVE_YEAR_AGE_GROUPS_KEY <- c(
   "All Ages" = "*All*",
   "< 1" = "1",
   "1-4" = "1-4",
@@ -43,9 +43,9 @@ five_year_age_groups_key <- c(
   "100+" = "100+",
   "Not Stated" = "NS"
 )
-five_year_age_groups_opts <- names(five_year_age_groups_key)
+FIVE_YEAR_AGE_GROUPS_OPTS <- names(FIVE_YEAR_AGE_GROUPS_KEY)
 
-single_year_ages_key <- c(
+SINGLE_YEAR_AGES_KEY <- c(
   "All Ages" = "*All*",
   "0" = "0",
   "1" = "1",
@@ -150,21 +150,21 @@ single_year_ages_key <- c(
   "100+" = "100",
   "Not Stated" = "NS"
 )
-single_year_ages_opts <- names(single_year_ages_key)
+SINGLE_YEAR_AGES_OPTS <- names(SINGLE_YEAR_AGES_KEY)
 
-infant_age_groups_key <- c(
+INFANT_AGE_GROUPS_KEY <- c(
   "All Infant Ages" = "00",
   "< 1 day" = "1d",
   "1-6 days" = "1-6d",
   "7-27 days" = "7-27d",
   "28-364 days" = "28-364d"
 )
-infant_age_groups_opts <- names(infant_age_groups_key)
+INFANT_AGE_GROUPS_OPTS <- names(INFANT_AGE_GROUPS_KEY)
 
 
-all_age_groups_opts <- c(
-  ten_year_age_groups_opts,
-  five_year_age_groups_opts,
-  single_year_ages_opts,
-  infant_age_groups_opts
+ALL_AGE_GROUPS_OPTS <- c(
+  TEN_YEAR_AGE_GROUPS_OPTS,
+  FIVE_YEAR_AGE_GROUPS_OPTS,
+  SINGLE_YEAR_AGES_OPTS,
+  INFANT_AGE_GROUPS_OPTS
 )

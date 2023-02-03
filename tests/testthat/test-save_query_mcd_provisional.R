@@ -19,7 +19,6 @@ test_that("Test that MCD queries are saved correctly", {
     occurrence_fips = c("01007", "01009", "01015", "01019", "06037"),
     occurrence_urbanization_year = c("2013"),
     occurrence_urbanization = "All Categories",
-    weekday = c("All Weekdays"),
     autopsy = c("All Values"),
     place_of_death = c("All Places"),
     gender = c("All Genders"),
@@ -39,15 +38,17 @@ test_that("Test that MCD queries are saved correctly", {
     httr::add_headers(.headers = c(
       "user-agent" = tothewonder:::get_ua,
       "Cache-Control" = "max-age=0",
-      "Accept" = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+      "Accept" = paste0("text/html,application/xhtml+xml,",
+                        "application/xml;q=0.9,image/webp,*/*;q=0.8"),
       "Accept-Language" = "en-us,en;q=0.5"
     ))
   )
   Sys.sleep(10)
   mcd_saved_txt <- httr::content(res, as = "text")
-  new_session <- paste0("https://wonder.cdc.gov",
-                        sub('.*(/controller/datarequest/D176;jsessionid=[A-Z0-9]+).*', "\\1",
-                            mcd_saved_txt)
+  new_session <- paste0(
+    "https://wonder.cdc.gov",
+    sub(".*(/controller/datarequest/D176;jsessionid=[A-Z0-9]+).*", "\\1",
+        mcd_saved_txt)
   )
   res <- httr::POST(
     url = new_session,
@@ -56,7 +57,8 @@ test_that("Test that MCD queries are saved correctly", {
     httr::add_headers(.headers = c(
       "user-agent" = tothewonder:::get_ua,
       "Cache-Control" = "max-age=0",
-      "Accept" = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+      "Accept" = paste0("text/html,application/xhtml+xml,",
+                        "application/xml;q=0.9,image/webp,*/*;q=0.8"),
       "Accept-Language" = "en-us,en;q=0.5"
     )),
     httr::content_type("application/x-www-form-urlencoded")
@@ -87,10 +89,14 @@ test_that("Test that MCD queries are saved correctly", {
   expect_true(grepl('option value="A1" selected',
                     mcd_saved_txt))
 
-  expect_true(grepl("input checked onclick=\"toggleOptions\\('D176.V25', 'D176.V2,D176.V4,D176.V12,D176.V22',false\\)",
-                    mcd_saved_txt))
+  expect_true(grepl(
+    paste0("input checked onclick=\"toggleOptions\\('D176.V25',",
+           " 'D176.V2,D176.V4,D176.V12,D176.V22',false\\)"),
+    mcd_saved_txt))
 
-  expect_true(grepl('</label><textarea wrap="off" id="TD176\\.V13-AND1" name="V_D176\\.V13">W00-X59\r\nV01-V99</textarea>',
+  expect_true(grepl(paste0('</label><textarea wrap="off" ',
+                           'id="TD176\\.V13-AND1" name="V_D176\\.V13">W00-',
+                           "X59\r\nV01-V99</textarea>"),
                     mcd_saved_txt))
 
 })

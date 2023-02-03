@@ -3,7 +3,7 @@ test_that("multiplication works", {
     "sad" = "sfd",
     "adsf" = "fdsa"
   )
-  single_race_6_key <- c(
+  SINGLE_RACE_6_KEY <- c(
     "All Races" = "*All*",
     "American Indian or Alaska Native" = "1002-5",
     "Asian" = "A",
@@ -24,7 +24,7 @@ test_that("multiplication works", {
     append_list_recode(
       c("aa", "bb"),
       c("All Races", "Asian"),
-      single_race_6_key,
+      SINGLE_RACE_6_KEY,
       ll
     ),
     list(sad = "sfd", adsf = "fdsa", aa = "*All*", bb = "A")

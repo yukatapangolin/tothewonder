@@ -1,4 +1,4 @@
-test_that("multiple cause of death function test", {
+test_that("provisional multiple cause of death function test", {
   wonder_url_mcod18 <- session_mcd_provisional(I_Agree = TRUE)
   df <- mcd_provisional(
     wonder_url = wonder_url_mcod18,
@@ -17,7 +17,6 @@ test_that("multiple cause of death function test", {
     occurrence_fips = "All",
     occurrence_urbanization_year = c("2013"),
     occurrence_urbanization = "All Categories",
-    weekday = c("All Weekdays"),
     autopsy = c("All Values"),
     place_of_death = c("All Places"),
     gender = c("All Genders"),
@@ -36,7 +35,9 @@ test_that("multiple cause of death function test", {
   expect_true(grep("Hispanic Origin: Not Hispanic or Latino", df$Notes) > 0)
   expect_true(grep("UCD - Injury Intent: Homicide", df$Notes) > 0)
   expect_true(grep("Group By: MMWR Week", df$Notes) > 0)
-  expect_true(grep("Single-Year Ages: 15 years; 16 years; 17 years; 18 years; 19 years; 20 years; 21 years; 22 years; 23 years; 24 years; 25 years", df$Notes) > 0)
+  expect_true(grep(paste0("Single-Year Ages: 15 years; 16 years; 17 years;",
+                         " 18 years; 19 years; 20 years; 21 years; 22 years;",
+                         " 23 years; 24 years; 25 years"), df$Notes) > 0)
 
   df <- mcd_provisional(
     wonder_url = wonder_url_mcod18,
@@ -56,7 +57,6 @@ test_that("multiple cause of death function test", {
     occurrence_fips = "All",
     occurrence_urbanization_year = c("2006"),
     occurrence_urbanization = "All Categories",
-    weekday = c("All Weekdays"),
     autopsy = c("All Values"),
     place_of_death = c("All Places"),
     gender = c("All Genders"),
@@ -70,16 +70,21 @@ test_that("multiple cause of death function test", {
     mcd_drug_alcohol_and = "All other alcohol-induced causes"
   )
   Sys.sleep(20)
-  expect_true(grep("UCD - Drug/Alcohol Induced Causes: Alcohol-induced causes", df$Notes) > 0)
-  expect_true(grep("MCD - Drug/Alcohol Induced Causes: Drug poisonings \\(overdose\\) Unintentional \\(X40-X44\\)", df$Notes) > 0)
-  expect_true(grep("MCD - Drug/Alcohol Induced Causes: All other alcohol-induced causes", df$Notes) > 0)
+  expect_true(grep("UCD - Drug/Alcohol Induced Causes: Alcohol-induced causes",
+                   df$Notes) > 0)
+  expect_true(grep(
+    paste0("MCD - Drug/Alcohol Induced Causes: Drug poisonings",
+          " \\(overdose\\) Unintentional \\(X40-X44\\)"), df$Notes) > 0)
+  expect_true(grep(
+    "MCD - Drug/Alcohol Induced Causes: All other alcohol-induced causes",
+    df$Notes) > 0)
   expect_true(grep("Single Race 6: Black or African American", df$Notes) > 0)
   expect_true(grep("Hispanic Origin: Not Hispanic or Latino", df$Notes) > 0)
   expect_true(grep("Group By: Month", df$Notes) > 0)
 })
 
 
-test_that("test that MCOD results match data from WONDER website", {
+test_that("test that provisional MCOD results match data from WONDER website", {
   wonder_url_mcod18 <- session_mcd_provisional(I_Agree = TRUE)
   df <- suppressWarnings(mcd_provisional(
     wonder_url = wonder_url_mcod18,
@@ -133,7 +138,6 @@ test_that("test that MCOD results match data from WONDER website", {
       "Small Metro",
       "Micropolitan (Nonmetro)"
     ),
-    weekday = c("All"),
     autopsy = c("Yes", "Unknown"),
     place_of_death = c(
       "Medical Facility - Inpatient",

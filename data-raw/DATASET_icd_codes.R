@@ -1,4 +1,12 @@
-icd_codes_key <- c(
+## Needed to open up the ICD items select for saving queries
+
+
+ICD10_TOP_ITEMS_UCD <- c("A00-B99", "C00-D48", "D50-D89", "E00-E88", "F01-F99",
+                         "G00-G98", "H00-H57", "H60-H93", "I00-I99", "J00-J98",
+                         "K00-K92", "L00-L98", "M00-M99", "N00-N98", "O00-O99",
+                         "P00-P96", "Q00-Q99", "R00-R99", "U00-U99", "V01-Y89")
+
+ICD_CODES_KEY <- c(
   "All Causes of Death" = "*All*",
   "-A00-B99(Certain infectious and parasitic diseases)" = "A00-B99",
   "-A00-A09(Intestinal infectious diseases)" = "A00-A09",
@@ -11138,4 +11146,4 @@ icd_codes_key <- c(
   "-999-999(Data not shown due to 6 month lag to account fo...)" = "999-999",
   "999(Data not shown due to 6 month lag to account fo...)" = "999"
 )
-icd_codes_opts <- names(icd_codes_key)
+icd_codes_opts <- names(ICD_CODES_KEY)

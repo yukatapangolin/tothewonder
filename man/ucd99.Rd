@@ -7,32 +7,32 @@
 ucd99(
   wonder_url,
   save = FALSE,
-  group_by_1 = group_by_1_opts,
-  group_by_2 = group_by_2_opts,
-  group_by_3 = group_by_2_opts,
-  group_by_4 = group_by_2_opts,
+  group_by_1 = GROUP_BY_1_OPTS,
+  group_by_2 = GROUP_BY_2_OPTS,
+  group_by_3 = GROUP_BY_2_OPTS,
+  group_by_4 = GROUP_BY_2_OPTS,
   show_age_adjusted = FALSE,
   show_totals = FALSE,
   show_confidence_interval = FALSE,
   show_standard_error = FALSE,
   residence_fips = "All",
   residence_urbanization_year = c("2006", "2013"),
-  residence_urbanization = urbanization_opts,
-  age = all_age_groups_opts,
-  gender = gender_opts,
-  hispanic_origin = hispanic_origin_opts,
-  race = race_opts,
+  residence_urbanization = URBANIZATION_OPTS,
+  age = ALL_AGE_GROUPS_OPTS,
+  gender = GENDER_OPTS,
+  hispanic_origin = HISPANIC_ORIGIN_OPTS,
+  race = RACE_OPTS,
   period = "All",
-  weekday = weekday_opts,
-  autopsy = autopsy_opts,
-  place_of_death = place_of_death_opts,
-  ucd_option = ucd_opts,
-  ucd_injury_intent = injury_intent_opts,
-  ucd_injury_mechanism = injury_mechanism_opts,
-  ucd_drug_alcohol = drug_alcohol_opts,
+  weekday = WEEKDAY_OPTS,
+  autopsy = AUTOPSY_OPTS,
+  place_of_death = PLACE_OF_DEATH_OPTS,
+  ucd_option = UCD_OPTS,
+  ucd_injury_intent = INJURY_INTENT_OPTS,
+  ucd_injury_mechanism = INJURY_MECHANISM_OPTS,
+  ucd_drug_alcohol = DRUG_ALCOHOL_OPTS,
   ucd_icd_codes = "All",
   ucd_infant_list = "All",
-  ucd_cause_113 = icd10_113_list_opts
+  ucd_cause_113 = ICD10_113_LIST_OPTS
 )
 }
 \arguments{
@@ -373,7 +373,8 @@ ucd99(
 \item White
 }}
 
-\item{period}{A vector of years/months in the interval 1999/01:2020/12 (or last year/month available)  to filter the data}
+\item{period}{A vector of years/months in the
+interval 1999/01:2020/12 (or last year/month available)  to filter the data}
 
 \item{weekday}{One or more of
 \itemize{
@@ -521,7 +522,9 @@ ucd99(
 \item All other non-drug and non-alcohol causes
 }}
 
-\item{ucd_icd_codes}{An ICD-10 code: See \url{https://wonder.cdc.gov/Deaths-by-Underlying-Cause.html} for the complete list}
+\item{ucd_icd_codes}{An ICD-10 code:
+See \url{https://wonder.cdc.gov/Deaths-by-Underlying-Cause.html} for
+the complete list}
 
 \item{ucd_infant_list}{Not implemented}
 
@@ -671,5 +674,6 @@ ucd99(
 A data.frame with the data from wonder
 }
 \description{
-Download UCD 1999-2020 CDC WONDER death certificate data from \url{https://wonder.cdc.gov/Deaths-by-Underlying-Cause.html}
+Download UCD 1999-2020 CDC WONDER death certificate data
+from \url{https://wonder.cdc.gov/Deaths-by-Underlying-Cause.html}
 }

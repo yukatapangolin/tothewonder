@@ -1,4 +1,4 @@
-injury_mechanism_key <- c(
+INJURY_MECHANISM_KEY <- c(
   "All Causes of Death" = "*All*",
   "Cut/Pierce" = "GRINJ-001",
   "Drowning" = "GRINJ-002",
@@ -71,18 +71,18 @@ injury_mechanism_key <- c(
   "Non-Injury: All other diseases (Residual)" = "GR113-111",
   "Non-Injury: Complications of medical and surgical care" = "GR113-135"
 )
-injury_mechanism_opts <- names(injury_mechanism_key)
+INJURY_MECHANISM_OPTS <- names(INJURY_MECHANISM_KEY)
 
-ucd_key <- c(
+UCD_KEY <- c(
   "ICD-10 Codes" = "D76.V2",
   "ICD-10 130 Cause List (Infants)" = "D76.V12",
   "Drug/Alcohol Induced Causes" = "D76.V25",
   "ICD-10 113 Cause List" = "D76.V4",
   "Injury Intent and Mechanism" = "D76.V22"
 )
-ucd_opts <- names(ucd_key)
+UCD_OPTS <- names(UCD_KEY)
 
-group_by_1_key <-
+GROUP_BY_1_KEY <-
   c(
     "Census Region" = "D76.V10-level1",
     "Census Division" = "D76.V10-level2",
@@ -115,13 +115,13 @@ group_by_1_key <-
     "Drug/Alcohol Induced" = "D76.V25-level1",
     "Drug/Alcohol Induced Cause" = "D76.V25-level2"
   )
-group_by_1_opts <- names(group_by_1_key)
+GROUP_BY_1_OPTS <- names(GROUP_BY_1_KEY)
 
-group_by_2_key <-
-  c("None" = "*None*", group_by_1_key)
-group_by_2_opts <- c("None", group_by_1_opts)
+GROUP_BY_2_KEY <-
+  c("None" = "*None*", GROUP_BY_1_KEY)
+GROUP_BY_2_OPTS <- c("None", GROUP_BY_1_OPTS)
 
-urbanization_key <- c(
+URBANIZATION_KEY <- c(
   "All Categories" = "*All*",
   "Large Central Metro" = "1",
   "Large Fringe Metro" = "2",
@@ -130,39 +130,39 @@ urbanization_key <- c(
   "Micropolitan (Nonmetro)" = "5",
   "NonCore (Nonmetro)" = "6"
 )
-urbanization_opts <- names(urbanization_key)
+URBANIZATION_OPTS <- names(URBANIZATION_KEY)
 
-single_year_ages_key <- c(
+SINGLE_YEAR_AGES_KEY <- c(
   "All Ages" = "*All*",
   "100+ years" = 100,
   "Not Stated" = "NS"
 )
 
-gender_key <- c(
+GENDER_KEY <- c(
   "All Genders" = "*All*",
   "Female" = "F",
   "Male" = "M"
 )
-gender_opts <- names(gender_key)
+GENDER_OPTS <- names(GENDER_KEY)
 
-hispanic_origin_key <- c(
+HISPANIC_ORIGIN_KEY <- c(
   "All Origins" = "*All*",
   "Not Hispanic or Latino" = "2186-2",
   "Hispanic or Latino" = "2135-2",
   "Not Stated" = "NS"
 )
-hispanic_origin_opts <- names(hispanic_origin_key)
+HISPANIC_ORIGIN_OPTS <- names(HISPANIC_ORIGIN_KEY)
 
-race_key <- c(
+RACE_KEY <- c(
   "All Races" = "*All*",
   "American Indian or Alaska Native" = "1002-5",
   "Asian or Pacific Islander" = "A-PI",
   "Black or African American" = "2054-5",
   "White" = "2106-3"
 )
-race_opts <- names(race_key)
+RACE_OPTS <- names(RACE_KEY)
 
-injury_intent_key <- c(
+INJURY_INTENT_KEY <- c(
   "All Causes of Death" = "*All*",
   "Unintentional" = "1",
   "Suicide" = "2",
@@ -171,9 +171,9 @@ injury_intent_key <- c(
   "Legal Intervention / Operations of War" = "5",
   "Non-Injury, no intent classified" = "9"
 )
-injury_intent_opts <- names(injury_intent_key)
+INJURY_INTENT_OPTS <- names(INJURY_INTENT_KEY)
 
-weekday_key <- c(
+WEEKDAY_KEY <- c(
   "All Weekdays" = "*All*",
   "Sunday" = "1",
   "Monday" = "2",
@@ -184,17 +184,17 @@ weekday_key <- c(
   "Saturday" = "7",
   "Unknown" = "9"
 )
-weekday_opts <- names(weekday_key)
+WEEKDAY_OPTS <- names(WEEKDAY_KEY)
 
-autopsy_key <- c(
+AUTOPSY_KEY <- c(
   "All Values" = "*All*",
   "No" = "N",
   "Yes" = "Y",
   "Unknown" = "U"
 )
-autopsy_opts <- names(autopsy_key)
+AUTOPSY_OPTS <- names(AUTOPSY_KEY)
 
-place_of_death_key <- c(
+PLACE_OF_DEATH_KEY <- c(
   "All Places" = "*All*",
   "Medical Facility - Inpatient" = "1",
   "Medical Facility - Outpatient or ER" = "2",
@@ -206,7 +206,7 @@ place_of_death_key <- c(
   "Other" = "7",
   "Place of death unknown" = "9"
 )
-place_of_death_opts <- names(place_of_death_key)
+PLACE_OF_DEATH_OPTS <- names(PLACE_OF_DEATH_KEY)
 
 census_region_key <- c(
   "*All*(The United States)" = "*All*",

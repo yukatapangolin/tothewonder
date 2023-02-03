@@ -1,5 +1,5 @@
 
-icd10_113_list_key <- c(
+ICD10_113_LIST_KEY <- c(
   "All Causes of Death" = "*All*",
   "#Salmonella infections (A01-A02)" = "GR113-001",
   "#Shigellosis and amebiasis (A03,A06)" = "GR113-002",
@@ -140,4 +140,4 @@ icd10_113_list_key <- c(
   "#Enterocolitis due to Clostridium difficile (A04.7)" = "GR113-136",
   "#COVID-19 (U07.1)" = "GR113-137"
 )
-icd10_113_list_opts <- names(icd10_113_list_key)
+ICD10_113_LIST_OPTS <- names(ICD10_113_LIST_KEY)

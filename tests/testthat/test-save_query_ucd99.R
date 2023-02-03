@@ -20,7 +20,8 @@ test_that("Test that UCD queries are saved correctly", {
                           hispanic_origin = "Hispanic or Latino",
                           race = "White",
                           ucd_option = "ICD-10 Codes",
-                          ucd_icd_codes = c("U07.1", "U01")) # COVID and Terrorism
+                          ucd_icd_codes = c("U07.1", "U01")) # COVID
+                                                             # and Terrorism
   Sys.sleep(10)
   ## Simulate clicking the "I Agree" button and visiting the page
   res <- httr::GET(
@@ -28,15 +29,17 @@ test_that("Test that UCD queries are saved correctly", {
     httr::add_headers(.headers = c(
       "user-agent" = tothewonder:::get_ua,
       "Cache-Control" = "max-age=0",
-      "Accept" = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+      "Accept" = paste0("text/html,application/xhtml+xml,",
+                        "application/xml;q=0.9,image/webp,*/*;q=0.8"),
       "Accept-Language" = "en-us,en;q=0.5"
     ))
   )
   Sys.sleep(10)
   saved_txt <- httr::content(res, as = "text")
-  new_session <- paste0("https://wonder.cdc.gov",
-                        sub('.*(/controller/datarequest/D76;jsessionid=[A-Z0-9]+).*', "\\1",
-                            saved_txt)
+  new_session <- paste0(
+    "https://wonder.cdc.gov",
+    sub(".*(/controller/datarequest/D76;jsessionid=[A-Z0-9]+).*", "\\1",
+        saved_txt)
   )
   res <- httr::POST(
     url = new_session,
@@ -45,7 +48,8 @@ test_that("Test that UCD queries are saved correctly", {
     httr::add_headers(.headers = c(
       "user-agent" = tothewonder:::get_ua,
       "Cache-Control" = "max-age=0",
-      "Accept" = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+      "Accept" = paste0("text/html,application/xhtml+xml,",
+                         "application/xml;q=0.9,image/webp,*/*;q=0.8"),
       "Accept-Language" = "en-us,en;q=0.5"
     )),
     httr::content_type("application/x-www-form-urlencoded")

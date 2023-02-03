@@ -2,7 +2,7 @@
 ## the testthat tests
 wonder_factory <- function(ua) {
   function() {
-    wonder_url_ucd99 <- paste0(
+    wonder_url_ucd99 <- paste0(  # nolint
       "https://wonder.cdc.gov",
       local({
         res <- httr::POST(
@@ -18,7 +18,8 @@ wonder_factory <- function(ua) {
           httr::add_headers(.headers = c(
             "user-agent" = ua,
             "Cache-Control" = "max-age=0",
-            "Accept" = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+            "Accept" = paste0("text/html,application/xhtml+xml,",
+                              "application/xml;q=0.9,image/webp,*/*;q=0.8"),
             "Accept-Language" = "en-us,en;q=0.5"
           ))
         )
@@ -35,5 +36,7 @@ wonder_factory <- function(ua) {
   }
 }
 
-chrome <- wonder_factory("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36")
+chrome <- wonder_factory(paste0("Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+                                " AppleWebKit/537.36 (KHTML, like Gecko)",
+                                " Chrome/99.0.4844.51 Safari/537.36"))
 delayedAssign("wonder_url_ucd99_test", chrome())

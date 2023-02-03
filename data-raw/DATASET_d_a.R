@@ -1,4 +1,4 @@
-drug_alcohol_key <- c(
+DRUG_ALCOHOL_KEY <- c(
   "All Causes of Death" = "*All*",
   "Drug-induced causes" = "D",
   "Drug poisonings (overdose) Unintentional (X40-X44)" = "D1",
@@ -12,4 +12,4 @@ drug_alcohol_key <- c(
   "O" = "All other non-drug and non-alcohol causes",
   "All other non-drug and non-alcohol causes" = "O9"
 )
-drug_alcohol_opts <- names(drug_alcohol_key)
+DRUG_ALCOHOL_OPTS <- names(DRUG_ALCOHOL_KEY)

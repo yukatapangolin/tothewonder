@@ -31,6 +31,7 @@ test_that("UCD Injury Intent and Injury Mechanism", {
   ) > 0)
 
   test_counties <- c(
+    "54",
     "01001", "01003", "01005", "01007", "01009", "01011",
     "01013", "01015", "01017", "01019", "01021", "01023",
     "01025", "01027", "01029", "01031", "01033", "01035",
@@ -62,21 +63,21 @@ test_that("UCD Injury Intent and Injury Mechanism", {
   )
   Sys.sleep(10)
   expect_true({
-    ## Check that the CDC data has got all the counties
+    ## Check that the CDC data has all the counties we requested
     (\() {
       for (FIPS in test_counties) {
         ## District of Columbia, 11001 FIPS Code, is a special case
-        ## The CDC uses only the state code "11"
+        ## The CDC uses the state code "11"
         if (FIPS == "11001") {
           FIPS <- "\\(11\\)"
-          if (!any(grepl(FIPS, df$Notes))) {
+          if (!any(grepl(paste0("(", FIPS, ")"), df$Notes))) {
             return(FALSE)
           }
         }
       }
       ## Check that no extra counties were included
-      for (FIPS in setdiff(tothewonder:::counties_fips, test_counties)) {
-        if (any(grepl(FIPS, df$Notes))) {
+      for (FIPS in setdiff(tothewonder:::COUNTIES_FIPS, test_counties)) {
+        if (any(grepl(paste0("(", FIPS, ")"), df$Notes))) {
           return(FALSE)
         }
       }
@@ -116,7 +117,7 @@ test_that("ucd99 errors", {
     ucd_option = "Injury Intent and Mechanism",
     ucd_injury_intent = "Homicide",
     ucd_injury_mechanism = "Firearm"
-  ), "period must be greater than 1999")
+  ), "period must be greater or equal to 1999")
   ## weekday includes All and other options
   expect_error(
     ucd99(
@@ -142,7 +143,8 @@ test_that("ucd99 errors", {
       ucd_injury_intent = "Homicide",
       ucd_injury_mechanism = "Firearm"
     ),
-    "weekday: you can't have both 'All' and other options selected. Please select either 'All' or specific options."
+    paste0("weekday: you can't have both 'All' and other options selected. ",
+           "Please select either 'All' or a specific option.")
   )
   ## race is invalid
   expect_error(
@@ -169,7 +171,8 @@ test_that("ucd99 errors", {
       ucd_injury_intent = "Homicide",
       ucd_injury_mechanism = "Firearm"
     ),
-    "race: you can't have both 'All' and other options selected. Please select either 'All' or specific options."
+    paste0("race: you can't have both 'All' and other ",
+           "options selected. Please select either 'All' or a specific option.")
   )
 
   ## group_by must be unique

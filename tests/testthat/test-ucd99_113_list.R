@@ -28,5 +28,7 @@ test_that("UCD 113 list", {
   ) > 0)
   expect_true(grep("Autopsy: Yes", df$Notes) > 0)
   expect_true(grep("Weekday: Monday", df$Notes) > 0)
-  expect_true(grep("Place of Death: Medical Facility - Inpatient", df$Notes) > 0)
+  expect_true(grep(
+    "Place of Death: Medical Facility - Inpatient",
+    df$Notes) > 0)
 })

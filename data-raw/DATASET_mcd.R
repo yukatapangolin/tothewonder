@@ -1,21 +1,21 @@
-mcd_ucd_key <- c(
+MCD_UCD_KEY <- c(
   "ICD-10 Codes" = "D176.V2",
   "ICD-10 130 Cause List (Infants)" = "D176.V12",
   "Drug/Alcohol Induced Causes" = "D176.V25",
   "ICD-10 113 Cause List" = "D176.V4",
   "Injury Intent and Mechanism" = "D176.V22"
 )
-mcd_ucd_opts <- names(mcd_ucd_key)
+MCD_UCD_OPTS <- names(MCD_UCD_KEY)
 
-mcd_mcd_key <- c(
+MCD_MCD_KEY <- c(
   "MCD - ICD-10 Codes" = "D176.V13",
   "MCD - ICD-10 130 Cause List (Infants)" = "D176.V16",
   "MCD - Drug/Alcohol Induced Causes" = "D176.V26",
   "MCD - ICD-10 113 Cause List" = "D176.V15"
 )
-mcd_mcd_opts <- names(mcd_mcd_key)
+MCD_MCD_OPTS <- names(MCD_MCD_KEY)
 
-mcd_group_by_1_key <-
+MCD_GROUP_BY_1_KEY <-
   c(
     "Residence Census Region" = "D176.V10-level1",
     "Residence Census Division" = "D176.V10-level2",
@@ -65,13 +65,13 @@ mcd_group_by_1_key <-
     "MCD - Drug/Alcohol Induced" = "D176.V26-level1",
     "MCD - Drug/Alcohol Induced Cause" = "D176.V26-level2"
   )
-mcd_group_by_1_opts <- names(mcd_group_by_1_key)
+MCD_GROUP_BY_1_OPTS <- names(MCD_GROUP_BY_1_KEY)
 
-mcd_group_by_2_key <-
-  c("None" = "*None*", mcd_group_by_1_key)
-mcd_group_by_2_opts <- c("None", mcd_group_by_1_opts)
+MCD_GROUP_BY_2_KEY <-
+  c("None" = "*None*", MCD_GROUP_BY_1_KEY)
+MCD_GROUP_BY_2_OPTS <- c("None", MCD_GROUP_BY_1_OPTS)
 
-single_race_6_key <- c(
+SINGLE_RACE_6_KEY <- c(
   "All Races" = "*All*",
   "American Indian or Alaska Native" = "1002-5",
   "Asian" = "A",
@@ -80,9 +80,9 @@ single_race_6_key <- c(
   "White" = "2106-3",
   "More than one race" = "M"
 )
-single_race_6_opts <- names(single_race_6_key)
+SINGLE_RACE_6_OPTS <- names(SINGLE_RACE_6_KEY)
 
-single_race_15_key <- c(
+SINGLE_RACE_15_KEY <- c(
   "All Races" = "*All*",
   "White" = "1",
   "Black" = "2",
@@ -100,9 +100,9 @@ single_race_15_key <- c(
   "Other Pacific Islander" = "14",
   "More than one race" = "15"
 )
-single_race_15_opts <- names(single_race_15_key)
+SINGLE_RACE_15_OPTS <- names(SINGLE_RACE_15_KEY)
 
-single_multi_race_31_key <- c(
+SINGLE_MULTI_RACE_31_KEY <- c(
   "All Races" = "*All*",
   "White (only)" = "1",
   "Black (only)" = "2",
@@ -136,22 +136,22 @@ single_multi_race_31_key <- c(
   "AIAN, Asian, NHOPI, and White" = "30",
   "Black, AIAN, Asian, NHOPI, and White" = "31"
 )
-single_multi_race_31_opts <- names(single_multi_race_31_key)
+SINGLE_MULTI_RACE_31_OPTS <- names(SINGLE_MULTI_RACE_31_KEY)
 
-race_18_opts <- unique(c(
-  single_race_6_opts,
-  single_race_15_opts,
-  single_multi_race_31_opts
+RACE_18_OPTS <- unique(c(
+  SINGLE_RACE_6_OPTS,
+  SINGLE_RACE_15_OPTS,
+  SINGLE_MULTI_RACE_31_OPTS
 ))
 
-race_options_opts <- c(
+RACE_OPTIONS_OPTS <- c(
   "Single Race 6",
   "Single Race 15",
   "Single/Multi Race 31"
 )
 
-period_key <- c(
+PERIOD_KEY <- c(
   "Year" = "YEAR",
   "MMWR" = "MMWR"
 )
-period_opts <- names(period_key)
+PERIOD_OPTS <- names(PERIOD_KEY)

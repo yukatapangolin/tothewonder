@@ -1,14 +1,15 @@
 open_item <- function(ll, ll_old, open_type = "Open", key,
                       items, wonder_url) {
-  if(is.null(ll_old[[key]]))
+  if (is.null(ll_old[[key]]))
     return()
-  if( grepl("All", ll_old[[key]]))
+  if (grepl("All", ll_old[[key]]))
     return()
   ## "finder-action-D176.V9-Open"
   open_key <- paste0(
     "finder-action-",
     substring(key, 3, nchar(key)),
-    "-", open_type)  # finder-action-D176.V13-Open or finder-action-D176.V13-Open+Fully
+    "-", open_type)  # finder-action-D176.V13-Open or
+                     # finder-action-D176.V13-Open+Fully
   ll[[open_key]] <- open_key
   ll <- append_list(key, items, ll)
   res <- query_wonder(wonder_url, ll)
@@ -56,7 +57,8 @@ query_wonder <- function(wurl, form_opts) {
     httr::add_headers(.headers = c(
       "user-agent" = get_ua,
       "Cache-Control" = "max-age=0",
-      "Accept" = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+      "Accept" = paste0("text/html,application/xhtml+xml,",
+                        "application/xml;q=0.9,image/webp,*/*;q=0.8"),
       "Accept-Language" = "en-us,en;q=0.5"
     ))
   )
@@ -65,25 +67,36 @@ query_wonder <- function(wurl, form_opts) {
 
 check_icd_codes <- function(icd_codes) {
   if (!all(icd_codes %in% c("All Causes of Death", "All",
-                            icd_codes_key, icd10_top_items_ucd))) {
-    warning("Looks like you are using an ICD-10 code unknown to WONDER (https://wonder.cdc.gov/wonder/help/ucd.html#ICD-10%20Codes). This may cause the query to error.")
-    warning(paste(setdiff(icd_codes, c(icd_codes_key,
-                                       icd10_top_items_ucd)),
-                  collapse = " "))
+                            ICD_CODES_KEY, ICD10_TOP_ITEMS_UCD))) {
+    war_txt <- paste0("Looks like you are using an ICD-10 code unknown to ",
+                      "WONDER ",
+                      "(https://wonder.cdc.gov/wonder/help/ucd.html",
+                      "#ICD-10%20Codes). This may cause the query to error. ",
+                      "The FIPS codes that are not in the database:")
+    warning(war_txt, "\n", paste0(
+      setdiff(icd_codes, c(ICD_CODES_KEY,
+                           ICD10_TOP_ITEMS_UCD)),
+      collapse = ", "))
   }
 }
 
 check_mcod_icd_codes <- function(mcod_icd_codes) {
   if (!all(mcod_icd_codes %in% c("All Causes of Death", "All",
-                                 mcod_icd_codes_key, icd10_top_items_mcd))) {
-    warning("Looks like you are using an ICD-10 code unknown to WONDER (https://wonder.cdc.gov/wonder/help/ucd.html#ICD-10%20Codes). This may cause the query to error.")
-    warning(paste(setdiff(mcod_icd_codes, c(mcod_icd_codes_key,
-                                            icd10_top_items_mcd)),
-                  collapse = " "))
+                                 MCOD_ICD_CODES_KEY, ICD10_TOP_ITEMS_MCD))) {
+    war_txt <- paste0("Looks like you are using an ICD-10 code unknown to ",
+                      "WONDER ",
+                      "(https://wonder.cdc.gov/wonder/help/ucd.html",
+                      "#ICD-10%20Codes). This may cause the query to error. ",
+                      "The FIPS codes that are not in the database:")
+
+    warning(war_txt, "\n", paste0(
+      setdiff(mcod_icd_codes, c(MCOD_ICD_CODES_KEY,
+                                ICD10_TOP_ITEMS_MCD)),
+      collapse = ", "))
   }
 }
 
-replace_All <- function(...) {
+replace_all_with_correct_text <- function(...) {
   tb <- list(
     residence_urbanization = "All Categories",
     occurrence_urbanization = "All Categories",
@@ -109,15 +122,21 @@ replace_All <- function(...) {
   other_args <- list(...)
   ## Check that if "All" is the argument it's unique
   for (i in seq_along(other_args)) {
-    if (any(other_args[[i]] == "All") & length(other_args[[i]]) > 1) {
-      stop(paste0(names(other_args)[i], ": you can't have both 'All' and other options selected. Please select either 'All' or specific options."))
+    if (any(other_args[[i]] == "All") && length(other_args[[i]]) > 1) {
+      stop(paste0(names(other_args)[i], ": you can't have both 'All' and ",
+                  "other ",
+                  "options selected. Please select either 'All' or a ",
+                  "specific option."))
     }
   }
   # Check to see if 'All...' is unique
   for (i in seq_along(other_args)) {
-    if (any(other_args[[i]] == tb[[names(other_args)[i]]]) &
+    if (any(other_args[[i]] == tb[[names(other_args)[i]]]) &&
         length(other_args[[i]]) > 1) {
-      stop(paste0(names(other_args)[i], ": you can't have both 'All' and other options selected. Please select either 'All' or specific options."))
+      stop(paste0(names(other_args)[i], ": you can't have both 'All' and ",
+                  "other ",
+                  "options selected. Please select either 'All' or a ",
+                  "specific options."))
     }
   }
   for (i in seq_along(other_args)) {

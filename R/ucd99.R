@@ -1,26 +1,26 @@
 
 
 check_params <- function(wonder_url,
-                         group_by_1 = group_by_1_opts,
-                         group_by_2 = group_by_2_opts,
-                         group_by_3 = group_by_2_opts,
-                         group_by_4 = group_by_2_opts,
+                         group_by_1 = GROUP_BY_1_OPTS,
+                         group_by_2 = GROUP_BY_2_OPTS,
+                         group_by_3 = GROUP_BY_2_OPTS,
+                         group_by_4 = GROUP_BY_2_OPTS,
                          show_age_adjusted,
                          show_totals,
                          show_confidence_interval,
                          show_standard_error,
                          residence_fips,
                          residence_urbanization_year = c("2006", "2013"),
-                         residence_urbanization = urbanization_opts,
-                         age = all_age_groups_opts,
-                         gender = gender_opts,
-                         hispanic_origin = hispanic_origin_opts,
-                         race = race_opts,
+                         residence_urbanization = URBANIZATION_OPTS,
+                         age = ALL_AGE_GROUPS_OPTS,
+                         gender = GENDER_OPTS,
+                         hispanic_origin = HISPANIC_ORIGIN_OPTS,
+                         race = RACE_OPTS,
                          period,
-                         weekday = weekday_opts,
-                         autopsy = autopsy_opts,
-                         place_of_death = place_of_death_opts,
-                         ucd_option = ucd_opts) {
+                         weekday = WEEKDAY_OPTS,
+                         autopsy = AUTOPSY_OPTS,
+                         place_of_death = PLACE_OF_DEATH_OPTS,
+                         ucd_option = UCD_OPTS) {
   ## Argument checking
   defined <- ls()
   passed <- names(as.list(match.call())[-1])
@@ -30,43 +30,54 @@ check_params <- function(wonder_url,
       collapse = ", "
     )))
   }
-  rlang::arg_match(group_by_1, group_by_1_opts)
-  rlang::arg_match(group_by_2, group_by_2_opts)
-  rlang::arg_match(group_by_3, group_by_2_opts)
-  rlang::arg_match(group_by_4, group_by_2_opts)
+  rlang::arg_match(group_by_1, GROUP_BY_1_OPTS)
+  rlang::arg_match(group_by_2, GROUP_BY_2_OPTS)
+  rlang::arg_match(group_by_3, GROUP_BY_2_OPTS)
+  rlang::arg_match(group_by_4, GROUP_BY_2_OPTS)
   stopifnot(is.logical(show_age_adjusted))
   stopifnot(is.logical(show_totals))
   stopifnot(is.logical(show_confidence_interval))
   stopifnot(is.logical(show_standard_error))
-  rlang::arg_match(gender, gender_opts, multiple = TRUE)
+  rlang::arg_match(gender, GENDER_OPTS, multiple = TRUE)
   rlang::arg_match(residence_urbanization_year, c("2006", "2013"))
-  rlang::arg_match(residence_urbanization, urbanization_opts, multiple = TRUE)
+  rlang::arg_match(residence_urbanization, URBANIZATION_OPTS, multiple = TRUE)
   if (!is.character(age)) {
     age <- as.character(age)
   }
-  rlang::arg_match(age, all_age_groups_opts, multiple = TRUE)
-  rlang::arg_match(hispanic_origin, hispanic_origin_opts, multiple = TRUE)
-  rlang::arg_match(race, race_opts, multiple = TRUE)
-  rlang::arg_match(weekday, weekday_opts, multiple = TRUE)
-  rlang::arg_match(autopsy, autopsy_opts, multiple = TRUE)
-  rlang::arg_match(place_of_death, place_of_death_opts, multiple = TRUE)
-  rlang::arg_match(ucd_option, ucd_opts)
+  rlang::arg_match(age, ALL_AGE_GROUPS_OPTS, multiple = TRUE)
+  rlang::arg_match(hispanic_origin, HISPANIC_ORIGIN_OPTS, multiple = TRUE)
+  rlang::arg_match(race, RACE_OPTS, multiple = TRUE)
+  rlang::arg_match(weekday, WEEKDAY_OPTS, multiple = TRUE)
+  rlang::arg_match(autopsy, AUTOPSY_OPTS, multiple = TRUE)
+  rlang::arg_match(place_of_death, PLACE_OF_DEATH_OPTS, multiple = TRUE)
+  rlang::arg_match(ucd_option, UCD_OPTS)
 
   ## Build the query
-  opts2 <- ucd_form_options
+  opts2 <- UCD_FORM_OPTIONS
 
   ## check period is in the right format
   if (any(period == "All")) {
     period <- "*All*"
   } else {
     if (!all(nchar(period) %in% c(4, 7))) {
-      stop("period must follow the pattern '%Y/%m' or '%Y' (e.g. 2002 or 1999/01 or 2020/11)")
+      stop(paste0("period must follow the pattern '%Y/%m' or '%Y'",
+                  " (e.g. 2002 or 1999/01 or 2020/11)"))
+    }
+    if (!all(grepl("^[[:digit:]]{4}|[[:digit:]]{4}/[[:digit:]]{2}$", period))) {
+      stop(paste0("period must follow the pattern '%Y/%m' or '%Y'",
+                  " (e.g. 2002 or 1999/01 or 2020/11)"))
     }
     if (any(as.numeric(gsub(
       "([0-9]{4}).*", "\\1",
       period
     )) < 1999)) {
-      stop("period must be greater than 1999")
+      stop("period must be greater or equal to 1999")
+    }
+    if (any(as.numeric(gsub(
+      "([0-9]{4}).*", "\\1",
+      period
+    )) > 2020)) {
+      stop("period must be smaller or equal to 2020")
     }
     test_char <- function(x) {
       if (nchar(x) == 7) {
@@ -91,7 +102,8 @@ check_params <- function(wonder_url,
       }
     }
     if (!all(sapply(period, test_char))) {
-      stop("period must follow the pattern '%Y/%m' or '%Y' (e.g. 2002 or 1999/01 or 2020/11)")
+      stop(paste0("period must follow the pattern '%Y/%m' or '%Y'",
+                  " (e.g. 2002 or 1999/01 or 2020/11)"))
     }
   }
   for (i in period) {
@@ -100,14 +112,14 @@ check_params <- function(wonder_url,
   }
 
   ## age param
-  if (all(age %in% ten_year_age_groups_opts)) {
+  if (all(age %in% TEN_YEAR_AGE_GROUPS_OPTS)) {
     for (i in age) {
-      opts2[length(opts2) + 1] <- dplyr::recode(i, !!!ten_year_age_groups_key)
+      opts2[length(opts2) + 1] <- dplyr::recode(i, !!!TEN_YEAR_AGE_GROUPS_KEY)
       names(opts2)[length(opts2)] <- "V_D76.V5"
       opts2$`O_age` <- "D76.V5"
     }
     # Add age adjusted column if 2 or more ten-year age groups are requested
-    if ((length(age) >= 2 | identical(age, "All Ages")) & show_age_adjusted) {
+    if ((length(age) >= 2 || identical(age, "All Ages")) && show_age_adjusted) {
       opts2$`O_aar_enable` <- "true"
       opts2$`O_aar` <- "aar_std"
       opts2$`O_aar_CI` <- "true"
@@ -117,23 +129,23 @@ check_params <- function(wonder_url,
       opts2$`O_aar_CI` <- "false"
       opts2$`O_aar_SE` <- "false"
     }
-  } else if (all(age %in% five_year_age_groups_opts)) {
+  } else if (all(age %in% FIVE_YEAR_AGE_GROUPS_OPTS)) {
     for (i in age) {
-      opts2[length(opts2) + 1] <- dplyr::recode(i, !!!five_year_age_groups_key)
+      opts2[length(opts2) + 1] <- dplyr::recode(i, !!!FIVE_YEAR_AGE_GROUPS_KEY)
       names(opts2)[length(opts2)] <- "V_D76.V51"
       opts2$`O_age` <- "D76.V51"
       opts2$`O_aar` <- "aar_none"
     }
-  } else if (all(age %in% single_year_ages_opts)) {
+  } else if (all(age %in% SINGLE_YEAR_AGES_OPTS)) {
     for (i in age) {
-      opts2[length(opts2) + 1] <- dplyr::recode(i, !!!single_year_ages_key)
+      opts2[length(opts2) + 1] <- dplyr::recode(i, !!!SINGLE_YEAR_AGES_KEY)
       names(opts2)[length(opts2)] <- "V_D76.V52"
       opts2$`O_age` <- "D76.V52"
       opts2$`O_aar` <- "aar_none"
     }
-  } else if (all(age %in% infant_age_groups_opts)) {
+  } else if (all(age %in% INFANT_AGE_GROUPS_OPTS)) {
     for (i in age) {
-      opts2[length(opts2) + 1] <- dplyr::recode(i, !!!infant_age_groups_key)
+      opts2[length(opts2) + 1] <- dplyr::recode(i, !!!INFANT_AGE_GROUPS_KEY)
       names(opts2)[length(opts2)] <- "V_D76.V6"
       opts2$`O_age` <- "D76.V6"
       opts2$`O_aar` <- "aar_none"
@@ -158,19 +170,26 @@ check_params <- function(wonder_url,
   if (length(v[v != "None"]) != length(unique(v[v != "None"]))) {
     stop("group_bys must be unique")
   }
-  opts2$B_1 <- dplyr::recode(group_by_1, !!!group_by_1_key)
-  opts2$B_2 <- dplyr::recode(group_by_2, !!!group_by_2_key)
-  opts2$B_3 <- dplyr::recode(group_by_3, !!!group_by_2_key)
-  opts2$B_4 <- dplyr::recode(group_by_4, !!!group_by_2_key)
+  opts2$B_1 <- dplyr::recode(group_by_1, !!!GROUP_BY_1_KEY)
+  opts2$B_2 <- dplyr::recode(group_by_2, !!!GROUP_BY_2_KEY)
+  opts2$B_3 <- dplyr::recode(group_by_3, !!!GROUP_BY_2_KEY)
+  opts2$B_4 <- dplyr::recode(group_by_4, !!!GROUP_BY_2_KEY)
 
   ## FIPS code for states/counties
   residence_fips <- ifelse(nchar(residence_fips) == 4,
     paste0("0", residence_fips),
     as.character(residence_fips)
   )
-  if (!all(residence_fips %in% c("All", states_fips, counties_fips))) {
-    warning("Looks like you are using a FIPS code unknown to WONDER. This may cause the query to error.")
-    warning(setdiff(residence_fips, c(states_fips, counties_fips)))
+  residence_fips <- ifelse(nchar(residence_fips) == 1,
+                           paste0("0", residence_fips),
+                           as.character(residence_fips)
+  )
+  if (!all(residence_fips %in% c("All", STATES_FIPS, COUNTIES_FIPS))) {
+    war_txt <- paste0("Looks like you are using a FIPS code unknown to WONDER.",
+                    " This may cause the query to error.")
+    warning(war_txt, "\n", paste0(
+      setdiff(residence_fips, c(STATES_FIPS, COUNTIES_FIPS)),
+      collapse = ", "))
   }
   for (fips in residence_fips) {
     if (fips == "All") {
@@ -207,10 +226,10 @@ check_params <- function(wonder_url,
         "V_D76.V21"
       ),
       list(
-        urbanization_key,
-        gender_key, hispanic_origin_key, race_key,
-        weekday_key, autopsy_key,
-        place_of_death_key
+        URBANIZATION_KEY,
+        GENDER_KEY, HISPANIC_ORIGIN_KEY, RACE_KEY,
+        WEEKDAY_KEY, AUTOPSY_KEY,
+        PLACE_OF_DEATH_KEY
       )
     ),
     .f = ~ for (i in ..1) {
@@ -229,7 +248,7 @@ process_ucd <- function(opts2,
                         ucd_drug_alcohol,
                         ucd_icd_codes,
                         ucd_cause_113) {
-  set_ucd_opts <- function(ll, opts2) {
+  set_ucd__opts <- function(ll, opts2) {
     purrr::pwalk(
       .l = ll,
       .f = ~ for (i in ..1) {
@@ -244,42 +263,42 @@ process_ucd <- function(opts2,
     )
     return(opts2)
   }
-  opts2$`O_ucd` <- dplyr::recode(ucd_option, !!!ucd_key)
+  opts2$`O_ucd` <- dplyr::recode(ucd_option, !!!UCD_KEY)
   if (ucd_option == "Injury Intent and Mechanism") {
-    rlang::arg_match(ucd_injury_intent, injury_intent_opts, multiple = TRUE)
-    rlang::arg_match(ucd_injury_mechanism, injury_mechanism_opts,
+    rlang::arg_match(ucd_injury_intent, INJURY_INTENT_OPTS, multiple = TRUE)
+    rlang::arg_match(ucd_injury_mechanism, INJURY_MECHANISM_OPTS,
       multiple = TRUE
     )
-    opts2 <- set_ucd_opts(
+    opts2 <- set_ucd__opts(
       list(
         list(ucd_injury_intent, ucd_injury_mechanism),
         c("V_D76.V22", "V_D76.V23"),
-        list(injury_intent_key, injury_mechanism_key)
+        list(INJURY_INTENT_KEY, INJURY_MECHANISM_KEY)
       ),
       opts2
     )
   } else if (ucd_option == "Drug/Alcohol Induced Causes") {
-    rlang::arg_match(ucd_drug_alcohol, drug_alcohol_opts, multiple = TRUE)
-    opts2 <- set_ucd_opts(
+    rlang::arg_match(ucd_drug_alcohol, DRUG_ALCOHOL_OPTS, multiple = TRUE)
+    opts2 <- set_ucd__opts(
       list(
         list(ucd_drug_alcohol),
         c("F_D76.V25"),
-        list(drug_alcohol_key)
+        list(DRUG_ALCOHOL_KEY)
       ),
       opts2
     )
   } else if (ucd_option == "ICD-10 113 Cause List") {
-    rlang::arg_match(ucd_cause_113, icd10_113_list_opts, multiple = TRUE)
-    opts2 <- set_ucd_opts(
+    rlang::arg_match(ucd_cause_113, ICD10_113_LIST_OPTS, multiple = TRUE)
+    opts2 <- set_ucd__opts(
       list(
         list(ucd_cause_113),
         c("V_D76.V4"),
-        list(icd10_113_list_key)
+        list(ICD10_113_LIST_KEY)
       ),
       opts2
     )
   } else if (ucd_option == "ICD-10 Codes") {
-    opts2 <- set_ucd_opts(
+    opts2 <- set_ucd__opts(
       list(
         list(ucd_icd_codes),
         c("F_D76.V2")
@@ -294,15 +313,20 @@ process_ucd <- function(opts2,
 
 #' Underlying Cause of Death, Injury Intent and Mechanism Results
 #'
-#' Download UCD 1999-2020 CDC WONDER death certificate data from \url{https://wonder.cdc.gov/Deaths-by-Underlying-Cause.html}
+#' Download UCD 1999-2020 CDC WONDER death certificate data
+#' from \url{https://wonder.cdc.gov/Deaths-by-Underlying-Cause.html}
 #'
 #' @param wonder_url CDC WONDER url with the 'session id'. See
 #' [session_ucd99()]
 #' @param save Save the query instead of downloading data from WONDER
-#' @param group_by_1 One of `r paste("\x0a*", tothewonder:::group_by_1_opts, collapse = "")`
-#' @param group_by_2 One of `r paste("\x0a*", tothewonder:::group_by_2_opts, collapse = "")`
-#' @param group_by_3 One of `r paste("\x0a*", tothewonder:::group_by_2_opts, collapse = "")`
-#' @param group_by_4 One of `r paste("\x0a*", tothewonder:::group_by_2_opts, collapse = "")`
+#' @param group_by_1 One of
+#' `r paste("\x0a*", tothewonder:::GROUP_BY_1_OPTS, collapse = "")`
+#' @param group_by_2 One of
+#' `r paste("\x0a*", tothewonder:::GROUP_BY_2_OPTS, collapse = "")`
+#' @param group_by_3 One of
+#' `r paste("\x0a*", tothewonder:::GROUP_BY_2_OPTS, collapse = "")`
+#' @param group_by_4 One of
+#' `r paste("\x0a*", tothewonder:::GROUP_BY_2_OPTS, collapse = "")`
 #' @param show_age_adjusted Show age adjusted values and confidence bands
 #' @param show_totals Show totals
 #' @param show_confidence_interval Show the confidence interval of the rate
@@ -311,22 +335,37 @@ process_ucd <- function(opts2,
 #' @param residence_urbanization_year One of
 #' * 2006
 #' * 2013
-#' @param residence_urbanization One or more of `r paste("\x0a*", tothewonder:::urbanization_opts, collapse = "")`
-#' @param age One or more of `r paste("\x0a*", unique(tothewonder:::all_age_groups_opts), collapse = "")`
-#' @param gender One or more of `r paste("\x0a*", tothewonder:::gender_opts, collapse = "")`
-#' @param hispanic_origin One or more of `r paste("\x0a*", tothewonder:::hispanic_origin_opts, collapse = "")`
-#' @param race One or more of `r paste("\x0a*", tothewonder:::race_opts, collapse = "")`
-#' @param period A vector of years/months in the interval 1999/01:2020/12 (or last year/month available)  to filter the data
-#' @param weekday One or more of `r paste("\x0a*", tothewonder:::weekday_opts, collapse = "")`
-#' @param autopsy One or more of `r paste("\x0a*", tothewonder:::autopsy_opts, collapse = "")`
-#' @param place_of_death One or more of `r paste("\x0a*", tothewonder:::place_of_death_opts, collapse = "")`
-#' @param ucd_option One of `r paste("\x0a*", tothewonder:::ucd_opts, collapse = "")`
-#' @param ucd_injury_intent One or more of `r paste("\x0a*", tothewonder:::injury_intent_opts, collapse = "")`
-#' @param ucd_injury_mechanism One or more of `r paste("\x0a*", tothewonder:::injury_mechanism_opts, collapse = "")`
-#' @param ucd_drug_alcohol One or more of `r paste("\x0a*", tothewonder:::drug_alcohol_opts, collapse = "")`
-#' @param ucd_icd_codes An ICD-10 code: See \url{https://wonder.cdc.gov/Deaths-by-Underlying-Cause.html} for the complete list
+#' @param residence_urbanization One or more of
+#' `r paste("\x0a*", tothewonder:::URBANIZATION_OPTS, collapse = "")`
+#' @param age One or more of
+#' `r paste("\x0a*", unique(tothewonder:::ALL_AGE_GROUPS_OPTS), collapse = "")`
+#' @param gender One or more of
+#' `r paste("\x0a*", tothewonder:::GENDER_OPTS, collapse = "")`
+#' @param hispanic_origin One or more of
+#' `r paste("\x0a*", tothewonder:::HISPANIC_ORIGIN_OPTS, collapse = "")`
+#' @param race One or more of
+#' `r paste("\x0a*", tothewonder:::RACE_OPTS, collapse = "")`
+#' @param period A vector of years/months in the
+#' interval 1999/01:2020/12 (or last year/month available)  to filter the data
+#' @param weekday One or more of
+#' `r paste("\x0a*", tothewonder:::WEEKDAY_OPTS, collapse = "")`
+#' @param autopsy One or more of
+#' `r paste("\x0a*", tothewonder:::AUTOPSY_OPTS, collapse = "")`
+#' @param place_of_death One or more of
+#' `r paste("\x0a*", tothewonder:::PLACE_OF_DEATH_OPTS, collapse = "")`
+#' @param ucd_option One of `r paste("\x0a*", tothewonder:::UCD_OPTS, collapse = "")`
+#' @param ucd_injury_intent One or more of
+#' `r paste("\x0a*", tothewonder:::INJURY_INTENT_OPTS, collapse = "")`
+#' @param ucd_injury_mechanism One or more of
+#' `r paste("\x0a*", tothewonder:::INJURY_MECHANISM_OPTS, collapse = "")`
+#' @param ucd_drug_alcohol One or more of
+#' `r paste("\x0a*", tothewonder:::DRUG_ALCOHOL_OPTS, collapse = "")`
+#' @param ucd_icd_codes An ICD-10 code:
+#' See \url{https://wonder.cdc.gov/Deaths-by-Underlying-Cause.html} for
+#' the complete list
 #' @param ucd_infant_list Not implemented
-#' @param ucd_cause_113 One or more of `r paste("\x0a*", tothewonder:::icd10_113_list_opts, collapse = "")`
+#' @param ucd_cause_113 One or more of
+#' `r paste("\x0a*", tothewonder:::ICD10_113_LIST_OPTS, collapse = "")`
 #'
 #' @return A data.frame with the data from wonder
 #' @export
@@ -334,32 +373,32 @@ process_ucd <- function(opts2,
 #' @md
 ucd99 <- function(wonder_url,
                   save = FALSE,
-                  group_by_1 = group_by_1_opts,
-                  group_by_2 = group_by_2_opts,
-                  group_by_3 = group_by_2_opts,
-                  group_by_4 = group_by_2_opts,
+                  group_by_1 = GROUP_BY_1_OPTS,
+                  group_by_2 = GROUP_BY_2_OPTS,
+                  group_by_3 = GROUP_BY_2_OPTS,
+                  group_by_4 = GROUP_BY_2_OPTS,
                   show_age_adjusted = FALSE,
                   show_totals = FALSE,
                   show_confidence_interval = FALSE,
                   show_standard_error = FALSE,
                   residence_fips = "All",
                   residence_urbanization_year = c("2006", "2013"),
-                  residence_urbanization = urbanization_opts,
-                  age = all_age_groups_opts,
-                  gender = gender_opts,
-                  hispanic_origin = hispanic_origin_opts,
-                  race = race_opts,
+                  residence_urbanization = URBANIZATION_OPTS,
+                  age = ALL_AGE_GROUPS_OPTS,
+                  gender = GENDER_OPTS,
+                  hispanic_origin = HISPANIC_ORIGIN_OPTS,
+                  race = RACE_OPTS,
                   period = "All",
-                  weekday = weekday_opts,
-                  autopsy = autopsy_opts,
-                  place_of_death = place_of_death_opts,
-                  ucd_option = ucd_opts,
-                  ucd_injury_intent = injury_intent_opts,
-                  ucd_injury_mechanism = injury_mechanism_opts,
-                  ucd_drug_alcohol = drug_alcohol_opts,
+                  weekday = WEEKDAY_OPTS,
+                  autopsy = AUTOPSY_OPTS,
+                  place_of_death = PLACE_OF_DEATH_OPTS,
+                  ucd_option = UCD_OPTS,
+                  ucd_injury_intent = INJURY_INTENT_OPTS,
+                  ucd_injury_mechanism = INJURY_MECHANISM_OPTS,
+                  ucd_drug_alcohol = DRUG_ALCOHOL_OPTS,
                   ucd_icd_codes = "All",
                   ucd_infant_list = "All",
-                  ucd_cause_113 = icd10_113_list_opts) {
+                  ucd_cause_113 = ICD10_113_LIST_OPTS) {
   if (missing(wonder_url)) {
     stop("wonder_url is missing")
   }
@@ -378,7 +417,7 @@ ucd99 <- function(wonder_url,
       assign(i, get(i)[1])
     }
   }
-  list2env(replace_All(
+  list2env(replace_all_with_correct_text(
     residence_urbanization = residence_urbanization,
     age = age,
     gender = gender,
@@ -442,30 +481,31 @@ ucd99 <- function(wonder_url,
   )
 
   ## Save query
-  if(save) {
+  if (save) {
     ## To save a location/period/drug-alcohol/icd10 code item
     ## you have to open up the selection box so that subitems
     ## are visible
     ## Change the query to a simple one to avoid hitting the
     ## WONDER server
-    simple_ucd_form2 <- simple_ucd_form
+    SIMPLE_UCD_FORM2 <- SIMPLE_UCD_FORM
     ## remove all keys that match select items to open
-    for(keyname in c("F_D76.V9",   # residence
+    for (keyname in c("F_D76.V9",   # residence
                  "F_D76.V1",   # period
                  "F_D76.V2",   # icd-10 codes
                  "F_D76.V25")) {# alcohol
-      simple_ucd_form2 <- simple_ucd_form2[ - which(names(simple_ucd_form2) == keyname)]
+      SIMPLE_UCD_FORM2 <- SIMPLE_UCD_FORM2[- which(names(SIMPLE_UCD_FORM2) ==
+                                                     keyname)]
   }
 
-    open_item(simple_ucd_form2, opts2, "Open",
-              "F_D76.V9", state_FIPS, wonder_url)
-    open_item(simple_ucd_form2, opts2, "Open",
-              "F_D76.V1",  as.character(1999:2020), wonder_url)
+    open_item(SIMPLE_UCD_FORM2, opts2, "Open",
+              "F_D76.V9", STATE_FIPS, wonder_url)
+    open_item(SIMPLE_UCD_FORM2, opts2, "Open",
+              "F_D76.V1", wonder_years("D76"), wonder_url)
     if (ucd_option == "ICD-10 Codes")
-      open_item(simple_ucd_form2, opts2, "Open Fully",
-                "F_D76.V2", icd10_top_items_ucd, wonder_url)
+      open_item(SIMPLE_UCD_FORM2, opts2, "Open Fully",
+                "F_D76.V2", ICD10_TOP_ITEMS_UCD, wonder_url)
     if (ucd_option == "Drug/Alcohol Induced Causes")
-      open_item(simple_ucd_form2, opts2, "Open",
+      open_item(SIMPLE_UCD_FORM2, opts2, "Open",
                 "F_D76.V25", c("A", "O", "N"), wonder_url)
 
     opts2$`action-Save` <- "Save"
@@ -475,7 +515,7 @@ ucd99 <- function(wonder_url,
   ## 1) Query WONDER
   res <- query_wonder(wonder_url, opts2)
   wonder_text <- httr::content(res, as = "text")
-  if(save){
+  if (save) {
     saved_query <- extract_saved(wonder_text, "D76")
     if (grepl("Your session timed out after ", wonder_text)) {
       stop("Your session timed out, please start another wonder_session")
@@ -505,7 +545,7 @@ ucd99 <- function(wonder_url,
     print_errors(wonder_text)
   }
   ## 2) Export data from WONDER as tab separated text
-  res <- query_wonder(wonder_url, ucd_download_form)
+  res <- query_wonder(wonder_url, UCD_DOWNLOAD_FORM)
 
   text_table <-  httr::content(res, as = "text")
   df <- utils::read.csv(text = text_table, sep = "\t")
@@ -536,9 +576,10 @@ print_errors <- function(string) {
 
 extract_saved <- function(string, db_num) {
 
-  str <- paste0(".*copySavedUrlToClipboard\\('(https://wonder.cdc.gov/controller/saved/",
-                db_num,
-                "/[A-Z0-9]+)'\\).*")
+  str <- paste0(
+    ".*copySavedUrlToClipboard\\('(https://wonder.cdc.gov/controller/saved/",
+    db_num,
+    "/[A-Z0-9]+)'\\).*")
   gsub(str,
-       '\\1', string)
+       "\\1", string)
 }
