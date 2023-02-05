@@ -2,7 +2,7 @@
 % Please edit documentation in R/mcd_final18.R
 \name{mcd_final18}
 \alias{mcd_final18}
-\title{Multiple Cause of Death, Injury Intent and Mechanism Results}
+\title{Final Multiple Cause of Death, Injury Intent and Mechanism Results}
 \usage{
 mcd_final18(
   wonder_url,
@@ -46,7 +46,7 @@ mcd_final18(
 }
 \arguments{
 \item{wonder_url}{CDC WONDER url with the 'session id'. See
-\code{\link[=session_mcd_provisional]{session_mcd_provisional()}}}
+\code{\link[=session_mcd_final18]{session_mcd_final18()}}}
 
 \item{save}{Save the query instead of downloading data from WONDER}
 
@@ -621,7 +621,9 @@ mcd_final18(
 }}
 
 \item{ucd_icd_codes}{An ICD-10 code: Visit
-\url{https://wonder.cdc.gov/mcd-icd10-provisional.html} for the complete list}
+\url{https://wonder.cdc.gov/wonder/help/
+mcd-provisional.html#ICD-10\%20Codes}
+for the complete list}
 
 \item{ucd_cause_113}{One or more of
 \itemize{
@@ -806,10 +808,14 @@ mcd_final18(
 }}
 
 \item{mcd_icd_codes}{An ICD-10 code: See
-\url{https://wonder.cdc.gov/mcd-icd10-provisional.html} for the complete list}
+\url{https://wonder.cdc.gov/wonder/help/
+mcd-provisional.html#MCD\%20-\%20ICD-10\%20Codes}
+for the complete list}
 
 \item{mcd_icd_codes_and}{An ICD-10 code: See
-\url{https://wonder.cdc.gov/mcd-icd10-provisional.html} for the complete list}
+\url{https://wonder.cdc.gov/wonder/help/mcd-provisional.html
+#MCD\%20-\%20ICD-10\%20Codes}
+for the complete list}
 
 \item{mcd_infant_list}{Not implemented}
 
@@ -1103,6 +1109,7 @@ mcd_final18(
 A data.frame with the data from wonder
 }
 \description{
-Download UCD 1999-2020 CDC WONDER death certificate data
+Download Multiple Cause of Death, 2018-2021,
+Single Race death certificate data
 from \url{https://wonder.cdc.gov/mcd-icd10-expanded.html}
 }

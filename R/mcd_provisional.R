@@ -57,10 +57,11 @@ process_ucd_mcod <- function(opts3,
 }
 
 
-#' Multiple Cause of Death, Injury Intent and Mechanism Results
+#' Provisional Multiple Cause of Death, Injury Intent and Mechanism Results
 #'
-#' Download UCD 1999-2020 CDC WONDER death certificate data from
-#' \url{https://wonder.cdc.gov/mcd-icd10-expanded.html}
+#' Download Provisional Mortality Statistics, 2018 through
+#' Last Month death certificate data from
+#' \url{https://wonder.cdc.gov/mcd-icd10-provisional.html)}
 #'
 #' @param wonder_url CDC WONDER url with the 'session id'. See
 #' [session_mcd_provisional()]
@@ -360,7 +361,17 @@ mcd_provisional <- function(wonder_url,
   }
   rlang::arg_match(age, ALL_AGE_GROUPS_OPTS, multiple = TRUE)
   ## age param
-  if (all(age %in% TEN_YEAR_AGE_GROUPS_OPTS)) {
+  ## Population and Rates are not available when values are selected for
+  ## Single-Year Ages or Ten-Year Age Groups in section 3, so default to
+  ## five-year age groups
+  if (all(age %in% FIVE_YEAR_AGE_GROUPS_OPTS)) {
+    for (i in age) {
+      opts3[length(opts3) + 1] <- dplyr::recode(i, !!!FIVE_YEAR_AGE_GROUPS_KEY)
+      names(opts3)[length(opts3)] <- "V_D176.V51"
+      opts3$`O_age` <- "D176.V51"
+      opts3$`O_aar` <- "aar_none"
+    }
+  } else if (all(age %in% TEN_YEAR_AGE_GROUPS_OPTS)) {
     for (i in age) {
       opts3[length(opts3) + 1] <- dplyr::recode(i, !!!TEN_YEAR_AGE_GROUPS_KEY)
       names(opts3)[length(opts3)] <- "V_D176.V5"
@@ -376,13 +387,6 @@ mcd_provisional <- function(wonder_url,
       opts3$`O_aar` <- "aar_none"
       opts3$`O_aar_CI` <- "false"
       opts3$`O_aar_SE` <- "false"
-    }
-  } else if (all(age %in% FIVE_YEAR_AGE_GROUPS_OPTS)) {
-    for (i in age) {
-      opts3[length(opts3) + 1] <- dplyr::recode(i, !!!FIVE_YEAR_AGE_GROUPS_KEY)
-      names(opts3)[length(opts3)] <- "V_D176.V51"
-      opts3$`O_age` <- "D176.V51"
-      opts3$`O_aar` <- "aar_none"
     }
   } else if (all(age %in% SINGLE_YEAR_AGES_OPTS)) {
     for (i in age) {

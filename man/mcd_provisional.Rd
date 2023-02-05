@@ -2,7 +2,7 @@
 % Please edit documentation in R/mcd_provisional.R
 \name{mcd_provisional}
 \alias{mcd_provisional}
-\title{Multiple Cause of Death, Injury Intent and Mechanism Results}
+\title{Provisional Multiple Cause of Death, Injury Intent and Mechanism Results}
 \usage{
 mcd_provisional(
   wonder_url,
@@ -1156,6 +1156,7 @@ list}
 A data.frame with the data from wonder
 }
 \description{
-Download UCD 1999-2020 CDC WONDER death certificate data from
-\url{https://wonder.cdc.gov/mcd-icd10-expanded.html}
+Download Provisional Mortality Statistics, 2018 through
+Last Month death certificate data from
+\url{https://wonder.cdc.gov/mcd-icd10-provisional.html)}
 }

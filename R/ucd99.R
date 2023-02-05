@@ -353,7 +353,8 @@ process_ucd <- function(opts2,
 #' `r paste("\x0a*", tothewonder:::AUTOPSY_OPTS, collapse = "")`
 #' @param place_of_death One or more of
 #' `r paste("\x0a*", tothewonder:::PLACE_OF_DEATH_OPTS, collapse = "")`
-#' @param ucd_option One of `r paste("\x0a*", tothewonder:::UCD_OPTS, collapse = "")`
+#' @param ucd_option One of
+#' `r paste("\x0a*", tothewonder:::UCD_OPTS, collapse = "")`
 #' @param ucd_injury_intent One or more of
 #' `r paste("\x0a*", tothewonder:::INJURY_INTENT_OPTS, collapse = "")`
 #' @param ucd_injury_mechanism One or more of

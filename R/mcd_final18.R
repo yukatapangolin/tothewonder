@@ -57,13 +57,14 @@ process_ucd_mcod_final18 <- function(opts3,
 }
 
 
-#' Multiple Cause of Death, Injury Intent and Mechanism Results
+#' Final Multiple Cause of Death, Injury Intent and Mechanism Results
 #'
-#' Download UCD 1999-2020 CDC WONDER death certificate data
+#' Download Multiple Cause of Death, 2018-2021,
+#' Single Race death certificate data
 #' from \url{https://wonder.cdc.gov/mcd-icd10-expanded.html}
 #'
 #' @param wonder_url CDC WONDER url with the 'session id'. See
-#' [session_mcd_provisional()]
+#' [session_mcd_final18()]
 #' @param save Save the query instead of downloading data from WONDER
 #' @param group_by_1 One of
 #' `r paste("\x0a*", tothewonder:::MCD_FINAL18_GROUP_BY_1_OPTS, collapse = "")`
@@ -110,7 +111,9 @@ process_ucd_mcod_final18 <- function(opts3,
 #' @param ucd_drug_alcohol One or more of
 #' `r paste("\x0a*", tothewonder:::DRUG_ALCOHOL_OPTS, collapse = "")`
 #' @param ucd_icd_codes An ICD-10 code: Visit
-#' \url{https://wonder.cdc.gov/mcd-icd10-provisional.html} for the complete list
+#' \url{https://wonder.cdc.gov/wonder/help/
+#' mcd-provisional.html#ICD-10\%20Codes}
+#' for the complete list
 #' @param ucd_cause_113 One or more of
 #' `r paste("\x0a*", tothewonder:::ICD10_113_LIST_OPTS, collapse = "")`
 #' @param mcd_option One or more of
@@ -120,9 +123,13 @@ process_ucd_mcod_final18 <- function(opts3,
 #' @param mcd_drug_alcohol_and One or more of
 #' `r paste("\x0a*", tothewonder:::DRUG_ALCOHOL_OPTS, collapse = "")`
 #' @param mcd_icd_codes An ICD-10 code: See
-#' \url{https://wonder.cdc.gov/mcd-icd10-provisional.html} for the complete list
+#' \url{https://wonder.cdc.gov/wonder/help/
+#' mcd-provisional.html#MCD\%20-\%20ICD-10\%20Codes}
+#' for the complete list
 #' @param mcd_icd_codes_and An ICD-10 code: See
-#' \url{https://wonder.cdc.gov/mcd-icd10-provisional.html} for the complete list
+#' \url{https://wonder.cdc.gov/wonder/help/mcd-provisional.html
+#' #MCD\%20-\%20ICD-10\%20Codes}
+#' for the complete list
 #' @param mcd_infant_list Not implemented
 #' @param mcd_infant_list_and Not implemented
 #' @param mcd_cause_113 One or more of
@@ -341,7 +348,17 @@ mcd_final18 <- function(wonder_url,
   }
   rlang::arg_match(age, ALL_AGE_GROUPS_OPTS, multiple = TRUE)
   ## age param
-  if (all(age %in% TEN_YEAR_AGE_GROUPS_OPTS)) {
+  ## Population and Rates are not available when values are selected for
+  ## Single-Year Ages or Ten-Year Age Groups in section 3 so default to
+  ## five-year age groups
+  if (all(age %in% FIVE_YEAR_AGE_GROUPS_OPTS)) {
+    for (i in age) {
+      opts3[length(opts3) + 1] <- dplyr::recode(i, !!!FIVE_YEAR_AGE_GROUPS_KEY)
+      names(opts3)[length(opts3)] <- "V_D157.V51"
+      opts3$`O_age` <- "D157.V51"
+      opts3$`O_aar` <- "aar_none"
+    }
+  }  else if (all(age %in% TEN_YEAR_AGE_GROUPS_OPTS)) {
     for (i in age) {
       opts3[length(opts3) + 1] <- dplyr::recode(i, !!!TEN_YEAR_AGE_GROUPS_KEY)
       names(opts3)[length(opts3)] <- "V_D157.V5"
@@ -357,13 +374,6 @@ mcd_final18 <- function(wonder_url,
       opts3$`O_aar` <- "aar_none"
       opts3$`O_aar_CI` <- "false"
       opts3$`O_aar_SE` <- "false"
-    }
-  } else if (all(age %in% FIVE_YEAR_AGE_GROUPS_OPTS)) {
-    for (i in age) {
-      opts3[length(opts3) + 1] <- dplyr::recode(i, !!!FIVE_YEAR_AGE_GROUPS_KEY)
-      names(opts3)[length(opts3)] <- "V_D157.V51"
-      opts3$`O_age` <- "D157.V51"
-      opts3$`O_aar` <- "aar_none"
     }
   } else if (all(age %in% SINGLE_YEAR_AGES_OPTS)) {
     for (i in age) {

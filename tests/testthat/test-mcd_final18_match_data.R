@@ -50,7 +50,8 @@ test_that("test that provisional MCOD results match data from WONDER website", {
     mcd_cause_113 = "#Diabetes mellitus (E10-E14)",
     mcd_cause_113_and = "All"
   ))
-  original <- read.csv("../mcd_final18_example/mcd_final18_wonder.txt", sep = "\t")
+  original <- read.csv("../mcd_final18_example/mcd_final18_wonder.txt",
+                       sep = "\t")
   # Query parameter order can vary so only test the Deaths, Crude Rate, etc
   # There's also a timestamp
   # Can only test up to 2020 since 2021 and 2022 data are provisional

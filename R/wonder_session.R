@@ -106,6 +106,19 @@ wonder_session <- function(db_num) {
   )
 }
 
+print_terms <- function() {
+  cli::cli_inform(paste0(
+    "Researchers who violate the terms of the data use restrictions",
+    " will lose access to WONDER and their sponsors and institutions",
+    " will be notified. Researchers who are suspected of violating",
+    " the rules may be prevented from using WONDER until an investigation",
+    " can be completed. Deliberately making a false statement in any",
+    " matter within the jurisdiction of any department or agency of the",
+    " Federal government violates 18 USC 1001 and is punishable by a fine",
+    " of up to $10,000 or up to 5 years in prison, or both."),
+    .envir = parent.frame())
+}
+
 #' Agree to the CDC WONDER data use restrictions
 #'
 #' @param I_Agree Pre-agree to the WONDER data use restrictions
@@ -117,20 +130,7 @@ session_ucd99 <- function(I_Agree = FALSE) {  # nolint
   if (!I_Agree) {
     if (!yesno(paste0("Do you agree with the CDC WONDER data use rest",
                       "rictions?\n(https://wonder.cdc.gov/datause.html)"))) {
-      cli::cli_inform(paste0("Researchers who violate the terms of the",
-                             " data use restrictions will lose access to",
-                             " WONDER and their sponsors and institutions",
-                             " will be notified. Researchers who are",
-                             " suspected of violating the rules may",
-                             " be prevented from using WONDER until",
-                             " an investigation can be completed.",
-                             " Deliberately making a false statement in",
-                             " any matter within the jurisdiction of",
-                             " any department or agency of the Federal",
-                             " government violates 18 USC 1001 and is",
-                             " punishable by a fine of up to $10,000 or",
-                             " up to 5 years in prison, or both.",
-                             .envir = parent.frame()))
+      print_terms()
       return(wonder_session("D76"))
     } else {
       return(NULL)
@@ -153,16 +153,7 @@ session_mcd_provisional <- function(I_Agree = FALSE) { # nolint
     if (!yesno(paste0("Do you agree with the CDC WONDER data use",
                       " restrictions?",
                       "\n(https://wonder.cdc.gov/datause.html)"))) {
-      cli::cli_inform(paste0(
-        "Researchers who violate the terms of the data use restrictions",
-        " will lose access to WONDER and their sponsors and institutions",
-        " will be notified. Researchers who are suspected of violating",
-        " the rules may be prevented from using WONDER until an investigation",
-        " can be completed. Deliberately making a false statement in any",
-        " matter within the jurisdiction of any department or agency of the",
-        " Federal government violates 18 USC 1001 and is punishable by a fine",
-        " of up to $10,000 or up to 5 years in prison, or both.",
-        .envir = parent.frame()))
+      print_terms()
       return(wonder_session("D176"))
     } else {
       return(NULL)
@@ -185,16 +176,7 @@ session_mcd_final18 <- function(I_Agree = FALSE) { # nolint
     if (!yesno(paste0(
       "Do you agree with the CDC WONDER data use restrictions?",
       "\n(https://wonder.cdc.gov/datause.html)"))) {
-      cli::cli_inform(paste0(
-        "Researchers who violate the terms of the data use restrictions",
-        " will lose access to WONDER and their sponsors and institutions",
-        " will be notified. Researchers who are suspected of violating the",
-        " rules may be prevented from using WONDER until an investigation",
-        " can be completed. Deliberately making a false statement in any",
-        " matter within the jurisdiction of any department or agency of the",
-        " Federal government violates 18 USC 1001 and is punishable by a",
-        " fine of up to $10,000 or up to 5 years in prison, or both.",
-        .envir = parent.frame()))
+      print_terms()
       return(wonder_session("D157"))
     } else {
       return(NULL)
@@ -210,22 +192,22 @@ session_mcd_final18 <- function(I_Agree = FALSE) { # nolint
 # nolint end
 yesno <- function(msg, .envir = parent.frame()) {
   yeses <- c(
-    "Yes", "Definitely", "For sure", "Yup",
+    "Yes", "Definitely", "For sure",
     "Yeah", "Of course", "Absolutely"
   )
   nos <- c(
     "Fauci gave me monkepox", "Google CDC covid test kits failure 2020",
     "Surgical masks in hospitals", "No",
     "Droplets!", "Let's go Brandon", "Haven't read them",
-    "I'm unvaxxed"
+    "I'm unvaxxed", "No human-to-human transmission"
   )
 
   cli::cli_inform(msg, .envir = .envir)
   cli::cli_inform(paste0(
     "Any effort to determine the identity of any reported cases, or to use",
     " the information for any purpose other than for statistical reporting",
-    " and analysis, is against the law. Therefore users will:",
-    .envir = .envir))
+    " and analysis, is against the law. Therefore users will:"),
+    .envir = .envir)
 
   cli::cli_inform(
     "* Use these data for statistical reporting and analysis only.",
@@ -233,21 +215,31 @@ yesno <- function(msg, .envir = parent.frame()) {
   cli::cli_inform(paste0(
     "* For sub-national geography, do not present or publish death or birth",
     " counts of 9 or fewer or rates based on counts of nine or fewer (in",
-    " figures, graphs, maps, table, etc.).",
-    .envir = .envir))
+    " figures, graphs, maps, table, etc.)."),
+    .envir = .envir)
   cli::cli_inform(paste0(
     "* Make no attempt to learn the identity of any person or establishment",
-    " included in these data.",
-    .envir = .envir))
+    " included in these data."),
+    .envir = .envir)
   cli::cli_inform(paste0(
     "* Make no disclosure or other use of the identity ",
     "of any person or establishment discovered ",
     "inadvertently and advise the Director, NCHS of",
-    " any such discovery.",
-    .envir = .envir))
+    " any such discovery."),
+    .envir = .envir)
 
   qs <- c(sample(yeses, 1), sample(nos, 2))
   rand <- sample(length(qs))
+
+  ## scope
+  tb <- lapply(.traceback(x = 0),
+               \(x) any(grepl("test_env", x))
+               ) |>
+    unlist()
+
+  ## check if called from testthat or interactive
+  if (any(tb) && !interactive())
+    return(FALSE)
 
   utils::menu(qs[rand]) != which(rand == 1)
 }

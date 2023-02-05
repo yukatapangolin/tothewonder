@@ -11,16 +11,14 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 <!-- badges: end -->
 
 The goal of `tothewonder` is to make it easy to access [CDC
-WONDER](https://wonder.cdc.gov) firearm homicide data. This package was
+WONDER](https://wonder.cdc.gov) mortality statistics. This package was
 created to protest the REPUBLICAN and NRA led efforts to suppress
 research into the underlying causes of gun violence.
 
 ## Installation
 
 ``` r
-devtools::install_github("yukatapangolin/tothewonder",
-                         ref = "master"
-                         )
+devtools::install_github("yukatapangolin/tothewonder", ref = "master")
 ```
 
 or download the source zip file from github and unzip
@@ -31,7 +29,7 @@ source <- devtools:::source_pkg("C:/path/tothewonder-master")
 install(source)
 ```
 
-## Example
+## Usage
 
 ### Step 1: Start a Session
 
@@ -80,14 +78,14 @@ from investigating GUN VIOLENCE.
 Depending on which database you want to access you can use one of the
 following functions to download your data:
 
-`ucd99()` - [Underlying Cause of Death
+`ucd99()` - [Underlying Cause of Death,
 1999-2020](https://wonder.cdc.gov/ucd-icd10.html)
 
-`mcd_provisional()` [Multiple Cause of Death 2018-Last Month
-(Provisional)](https://wonder.cdc.gov/mcd-icd10-provisional.html)
+`mcd_provisional()` - [Provisional Mortality Statistics, 2018 through
+Last Month](https://wonder.cdc.gov/mcd-icd10-provisional.html)
 
-`mcd_final18()` [Multiple Cause of Death 2018-2021
-(Final)](https://wonder.cdc.gov/mcd-icd10-expanded.html)
+`mcd_final18()` - [Multiple Cause of Death, 2018-2021, Single
+Race](https://wonder.cdc.gov/mcd-icd10-expanded.html)
 
 ## Examples
 
@@ -218,7 +216,8 @@ trump_2020 <- read.csv(url,
                                       "integer", "integer",
                                       "integer", "numeric",
                                       "numeric", "numeric"))
-trump_2020$winner <- ifelse(trump_2020$per_gop > trump_2020$per_dem, "Trump", "Biden")
+trump_2020$winner <- ifelse(trump_2020$per_gop > trump_2020$per_dem,
+                            "Trump", "Biden")
 trump_2020 <- subset(trump_2020, per_gop >= .6 | per_dem >= .6)
 
 trump_2020 <- subset(trump_2020, state_name != "Alaska")
@@ -252,8 +251,10 @@ deaths |>
   ggplot(aes(Year.Code, Crude.Rate, group = winner, color = winner)) +
   geom_line(linewidth = .9) +
   labs(title = "Male Firearm Homicide Rate by 2020 Presidential County Vote",
-       subtitle = "Counties that voted for Trump in 2020 experienced smaller homicide increases.",
-       caption = "Source: CDC WONDER. 2018-2021 Final Multiple Cause of Death Files") +
+       subtitle = paste0("Counties that voted for Trump in 2020",
+                            " experienced smaller homicide increases."),
+       caption = paste0("Source: CDC WONDER. ",
+                           "2018-2021 Final Multiple Cause of Death Files")) +
   expand_limits(y = 0) +
   scale_color_manual(
     values = c("#244999",
@@ -275,12 +276,15 @@ Vote](https://yukatapangolin.github.io/images/male_firearm_homicide_vote.png)
 
   - Update package data by running `Rscript data-raw/DATASET.R`
 
+  - Run `Rscript -e "devtools::document(roclets = c('rd', 'collate',
+    'namespace'))"` to update documentation
+
   - Run `find . -type f -exec sed...` to correct paths
 
   - Run `Rscript -e 'rmarkdown::render("README.Rmd")'` to knit
     README.Rmd
 
-  - Update the NEWS.md with changes.
+  - Update the NEWS.md file with any changes.
 
   - Tag the release `git tag v0.1.0 && git push origin --tags`
 
