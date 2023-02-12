@@ -633,8 +633,8 @@ mcd_final18 <- function(wonder_url,
     if (any(mcd_icd_codes_and == "*All*(All Causes of Death)")) {
       mcd_icd_codes_and <- "*All*"
     }
-    check_mcod_icd_codes(mcd_icd_codes)
-    check_mcod_icd_codes(mcd_icd_codes_and)
+    check_mcd_final_icd_codes(mcd_icd_codes)
+    check_mcd_final_icd_codes(mcd_icd_codes_and)
     opts3$"V_D157.V13" <- gsub(
       "%20", "+",
       utils::URLencode(
@@ -689,13 +689,13 @@ mcd_final18 <- function(wonder_url,
                 "F_D157.V25", c("A", "O"), wonder_url)
     else if (ucd_option == "ICD-10 Codes")
       open_item(simple_mcd_form2, opts3, "Open Fully",
-                "F_D157.V2", ICD10_TOP_ITEMS_MCD, wonder_url)
+                "F_D157.V2", UCD_ICD10_TOP_ITEMS_MCD_FINAL18, wonder_url)
     if (mcd_option == "MCD - Drug/Alcohol Induced Causes")
       open_item(simple_mcd_form2, opts3, "Open",
                 "F_D157.V26", c("A", "O", "N"), wonder_url)
     else if (mcd_option == "MCD - ICD-10 Codes")
       open_item(simple_mcd_form2, opts3, "Open Fully",
-                "F_D157.V13", ICD10_TOP_ITEMS_MCD, wonder_url)
+                "F_D157.V13", MCD_ICD10_TOP_ITEMS_MCD_FINAL18, wonder_url)
     opts3$`action-Save` <- "Save"
     opts3$`action-Send` <- NULL
   }

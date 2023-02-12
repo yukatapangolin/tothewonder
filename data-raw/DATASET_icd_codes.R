@@ -11141,9 +11141,6 @@ ICD_CODES_KEY <- c(
   "-Y89(Sequelae of other external causes)" = "Y89",
   "Y89.0(Sequelae of legal intervention)" = "Y89.0",
   "Y89.1(Sequelae of war operations)" = "Y89.1",
-  "Y89.9(Sequelae of unspecified external cause)" = "Y89.9",
-  "-999--999(Data not shown due to 6 month lag to account fo...)" = "999--999",
-  "-999-999(Data not shown due to 6 month lag to account fo...)" = "999-999",
-  "999(Data not shown due to 6 month lag to account fo...)" = "999"
+  "Y89.9(Sequelae of unspecified external cause)" = "Y89.9"
 )
 icd_codes_opts <- names(ICD_CODES_KEY)

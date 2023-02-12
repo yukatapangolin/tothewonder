@@ -1,13 +1,51 @@
-# "A00-B99", "C00-D48", "D50-D89", "E00-E89", "F01-F99", "G00-G98", "H00-H59", "H60-H95", "I00-I99", "J00-J98", "K00-K92", "L00-L98", "M00-M99", "N00-N99", "O00-O99", "P00-P96", "Q00-Q99", "R00-R99", "S00-T98", "U00-U99", "V01-Y89", "999--999"
+UCD_ICD10_TOP_ITEMS_MCD_FINAL18 <- c(
+  "A00-B99",
+  "C00-D48",
+  "D50-D89",
+  "E00-E88",
+  "F01-F99",
+  "G00-G98",
+  "H00-H57",
+  "H60-H93",
+  "I00-I99",
+  "J00-J98",
+  "K00-K92",
+  "L00-L98",
+  "M00-M99",
+  "N00-N98",
+  "O00-O99",
+  "P00-P96",
+  "Q00-Q99",
+  "R00-R99",
+  "U00-U99",
+  "V01-Y89")
 
-ICD10_TOP_ITEMS_MCD <- c( "A00-B99", "C00-D48", "D50-D89", "E00-E89", "F01-F99",
-                          "G00-G98", "H00-H59", "H60-H95", "I00-I99", "J00-J98",
-                          "K00-K92", "L00-L98", "M00-M99", "N00-N99", "O00-O99",
-                          "P00-P96", "Q00-Q99", "R00-R99", "S00-T98", "U00-U99",
-                          "V01-Y89", "999--999")
 
-MCOD_ICD_CODES_KEY <- c(
+MCD_ICD10_TOP_ITEMS_MCD_FINAL18 <- c(
+  "A00-B99",
+  "C00-D48",
+  "D50-D89",
+  "E00-E89",
+  "F01-F99",
+  "G00-G98",
+  "H00-H59",
+  "H60-H95",
+  "I00-I99",
+  "J00-J98",
+  "K00-K92",
+  "L00-L98",
+  "M00-M99",
+  "N00-N99",
+  "O00-O99",
+  "P00-P96",
+  "Q00-Q99",
+  "R00-R99",
+  "S00-T98",
+  "U00-U99",
+  "V01-Y89")
 
+
+MCD_ICD_CODES_KEY <- c(
   "*All*(All Causes of Death)" = "*All*",
   "-A00-B99(Certain infectious and parasitic diseases)" = "A00-B99",
   "-A00-A09(Intestinal infectious diseases)" = "A00-A09",
@@ -9588,8 +9626,7 @@ MCOD_ICD_CODES_KEY <- c(
   "T98.3(Sequelae of complications of surgical and medic...)" = "T98.3",
   "-U00-U99(Codes for special purposes)" = "U00-U99",
   "-U00-U49(Provisional assignment of new diseases of uncer...)" = "U00-U49",
-  "U01"="-*U01(Terrorism - Assault (homicide)
-)",
+  "U01" = "*U01(Terrorism - Assault (homicide)",
   "*U01.0(Terrorism involving explosion of marine weapons)" = "U01.0",
   "*U01.1(Terrorism involving destruction of aircraft)" = "U01.1",
   "*U01.2(Terrorism involving other explosions and fragments)" = "U01.2",
@@ -11143,9 +11180,5 @@ MCOD_ICD_CODES_KEY <- c(
   "-Y89(Sequelae of other external causes)" = "Y89",
   "Y89.0(Sequelae of legal intervention)" = "Y89.0",
   "Y89.1(Sequelae of war operations)" = "Y89.1",
-  "Y89.9(Sequelae of unspecified external cause)" = "Y89.9",
-  "-999--999(Data not shown due to 6 month lag to account fo...)" = "999--999",
-  "-999-999(Data not shown due to 6 month lag to account fo...)" = "999-999",
-  "999(Data not shown due to 6 month lag to account fo...)" = "999"
+  "Y89.9" = "Y89.9(Sequelae of unspecified external cause)"
 )
-mcod_icd_codes_opts <- names(ICD_CODES_KEY)

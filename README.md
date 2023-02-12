@@ -279,7 +279,7 @@ Vote](https://yukatapangolin.github.io/images/male_firearm_homicide_vote.png)
   - Run `Rscript -e "devtools::document(roclets = c('rd', 'collate',
     'namespace'))"` to update documentation
 
-  - Run `find . -type f -exec sed...` to correct paths
+  - Run `find . -type f -exec sed` to correct paths
 
   - Run `Rscript -e 'rmarkdown::render("README.Rmd")'` to knit
     README.Rmd

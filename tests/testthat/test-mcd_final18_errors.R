@@ -91,8 +91,21 @@ test_that("final multiple cause of death function errors", {
                            mcd_cause_113_and = "MMWR Week"),
                "mcd_cause_113_and` must be one of")
 
-  expect_warning(check_mcod_icd_codes(c("dsafasdf", "sadfd")),
-                 "dsafasdf, sadfd")
+  expect_no_warning(
+    check_mcd_provisional_icd_codes(c("S00-T98", "E00-E89"))
+  )
+  expect_warning(check_mcd_provisional_icd_codes(
+    c("dsafasdf", "sadfd")),
+    "dsafasdf, sadfd")
+  expect_warning(check_mcd_final_icd_codes(
+    c("999-999")),
+    "999-999")
+  expect_no_warning(check_icd_provisional_codes(
+    c("999-999")))
+  expect_warning(check_icd_codes(
+    c("999-999")),
+    "999-999")
+
   expect_warning(tryCatch(mcd_final18(wonder_url = fake_session,
                                       ucd_option = "ICD-10 Codes",
                                       ucd_icd_codes = c("101", "54987")),

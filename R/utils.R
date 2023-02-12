@@ -80,9 +80,29 @@ check_icd_codes <- function(icd_codes) {
   }
 }
 
-check_mcod_icd_codes <- function(mcod_icd_codes) {
+check_icd_provisional_codes <- function(icd_codes) {
+  if (!all(icd_codes %in% c("All Causes of Death", "All",
+                            ICD_CODES_KEY,
+                            EXTRA_MCD_PROVISIONAL_UCD_ICD_CODES_KEY,
+                            ICD10_TOP_ITEMS_UCD))) {
+    war_txt <- paste0("Looks like you are using an ICD-10 code unknown to ",
+                      "WONDER ",
+                      "(https://wonder.cdc.gov/wonder/help/ucd.html",
+                      "#ICD-10%20Codes). This may cause the query to error. ",
+                      "The FIPS codes that are not in the database:")
+    warning(war_txt, "\n", paste0(
+      setdiff(icd_codes, c(ICD_CODES_KEY,
+                           EXTRA_MCD_PROVISIONAL_UCD_ICD_CODES_KEY,
+                           ICD10_TOP_ITEMS_UCD)),
+      collapse = ", "))
+  }
+}
+
+check_mcd_final_icd_codes <- function(mcod_icd_codes) {
   if (!all(mcod_icd_codes %in% c("All Causes of Death", "All",
-                                 MCOD_ICD_CODES_KEY, ICD10_TOP_ITEMS_MCD))) {
+                                 MCD_ICD_CODES_KEY,
+                                 MCD_ICD10_TOP_ITEMS_MCD_PROVISIONAL
+  ))) {
     war_txt <- paste0("Looks like you are using an ICD-10 code unknown to ",
                       "WONDER ",
                       "(https://wonder.cdc.gov/wonder/help/ucd.html",
@@ -90,8 +110,28 @@ check_mcod_icd_codes <- function(mcod_icd_codes) {
                       "The FIPS codes that are not in the database:")
 
     warning(war_txt, "\n", paste0(
-      setdiff(mcod_icd_codes, c(MCOD_ICD_CODES_KEY,
-                                ICD10_TOP_ITEMS_MCD)),
+      setdiff(mcod_icd_codes, c(MCD_ICD_CODES_KEY,
+                                MCD_ICD10_TOP_ITEMS_MCD_PROVISIONAL)),
+      collapse = ", "))
+  }
+}
+
+check_mcd_provisional_icd_codes <- function(mcod_icd_codes) { # nolint
+  if (!all(mcod_icd_codes %in% c("All Causes of Death", "All",
+                                 MCD_ICD_CODES_KEY,
+                                 EXTRA_MCD_PROVISIONAL_MCD_ICD_CODES_KEY,
+                                 MCD_ICD10_TOP_ITEMS_MCD_PROVISIONAL
+                                 ))) {
+    war_txt <- paste0("Looks like you are using an ICD-10 code unknown to ",
+                      "WONDER ",
+                      "(https://wonder.cdc.gov/wonder/help/ucd.html",
+                      "#ICD-10%20Codes). This may cause the query to error. ",
+                      "The FIPS codes that are not in the database:")
+
+    warning(war_txt, "\n", paste0(
+      setdiff(mcod_icd_codes, c(MCD_ICD_CODES_KEY,
+                                EXTRA_MCD_PROVISIONAL_MCD_ICD_CODES_KEY,
+                                MCD_ICD10_TOP_ITEMS_MCD_PROVISIONAL)),
       collapse = ", "))
   }
 }
