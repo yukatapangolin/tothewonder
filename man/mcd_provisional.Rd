@@ -34,18 +34,18 @@ mcd_provisional(
   ucd_option = MCD_UCD_OPTS,
   ucd_injury_intent = INJURY_INTENT_OPTS,
   ucd_injury_mechanism = INJURY_MECHANISM_OPTS,
-  ucd_drug_alcohol = DRUG_ALCOHOL_OPTS,
+  ucd_drug_alcohol = MCD_PROVISIONAL_DRUG_ALCOHOL_OPTS,
   ucd_icd_codes = "All",
-  ucd_cause_113 = ICD10_113_LIST_OPTS,
+  ucd_cause_113 = MCD_PROVISIONAL_ICD10_113_LIST_OPTS,
   mcd_option = MCD_MCD_OPTS,
-  mcd_drug_alcohol = DRUG_ALCOHOL_OPTS,
-  mcd_drug_alcohol_and = DRUG_ALCOHOL_OPTS,
+  mcd_drug_alcohol = MCD_PROVISIONAL_DRUG_ALCOHOL_OPTS,
+  mcd_drug_alcohol_and = MCD_PROVISIONAL_DRUG_ALCOHOL_OPTS,
   mcd_icd_codes = "All",
   mcd_icd_codes_and = "All",
   mcd_infant_list = "All",
   mcd_infant_list_and = "All",
-  mcd_cause_113 = ICD10_113_LIST_OPTS,
-  mcd_cause_113_and = ICD10_113_LIST_OPTS
+  mcd_cause_113 = MCD_PROVISIONAL_ICD10_113_LIST_OPTS,
+  mcd_cause_113_and = MCD_PROVISIONAL_ICD10_113_LIST_OPTS
 )
 }
 \arguments{
@@ -667,8 +667,10 @@ mcd_provisional(
 \item Alcohol-induced causes
 \item Alcohol poisonings (overdose) (X45, X65, Y15)
 \item All other alcohol-induced causes
-\item O
 \item All other non-drug and non-alcohol causes
+\item O9
+\item Data not shown due to 6 month lag to account for delays in death certificate completion for certain causes of death.
+\item N9
 }}
 
 \item{ucd_icd_codes}{An ICD-10 code:
@@ -815,6 +817,7 @@ for the complete list}
 \item #Complications of medical and surgical care (Y40-Y84,Y88)
 \item #Enterocolitis due to Clostridium difficile (A04.7)
 \item #COVID-19 (U07.1)
+\item Data not shown due to 6 month lag to account for delays in death certificate completion for certain causes of death (999)
 }}
 
 \item{mcd_option}{One or more of
@@ -837,8 +840,10 @@ for the complete list}
 \item Alcohol-induced causes
 \item Alcohol poisonings (overdose) (X45, X65, Y15)
 \item All other alcohol-induced causes
-\item O
 \item All other non-drug and non-alcohol causes
+\item O9
+\item Data not shown due to 6 month lag to account for delays in death certificate completion for certain causes of death.
+\item N9
 }}
 
 \item{mcd_drug_alcohol_and}{One or more of
@@ -853,8 +858,10 @@ for the complete list}
 \item Alcohol-induced causes
 \item Alcohol poisonings (overdose) (X45, X65, Y15)
 \item All other alcohol-induced causes
-\item O
 \item All other non-drug and non-alcohol causes
+\item O9
+\item Data not shown due to 6 month lag to account for delays in death certificate completion for certain causes of death.
+\item N9
 }}
 
 \item{mcd_icd_codes}{An ICD-10 code: See
@@ -1008,6 +1015,7 @@ list}
 \item #Complications of medical and surgical care (Y40-Y84,Y88)
 \item #Enterocolitis due to Clostridium difficile (A04.7)
 \item #COVID-19 (U07.1)
+\item Data not shown due to 6 month lag to account for delays in death certificate completion for certain causes of death (999)
 }}
 
 \item{mcd_cause_113_and}{One or more of
@@ -1150,6 +1158,7 @@ list}
 \item #Complications of medical and surgical care (Y40-Y84,Y88)
 \item #Enterocolitis due to Clostridium difficile (A04.7)
 \item #COVID-19 (U07.1)
+\item Data not shown due to 6 month lag to account for delays in death certificate completion for certain causes of death (999)
 }}
 }
 \value{

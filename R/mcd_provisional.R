@@ -42,18 +42,18 @@ process_ucd_mcod <- function(opts3,
     )
   } else if (ucd_option == "Drug/Alcohol Induced Causes") {
     ucd_drug_alcohol <- rlang::arg_match(ucd_drug_alcohol,
-                                         DRUG_ALCOHOL_OPTS,
+                                         MCD_PROVISIONAL_DRUG_ALCOHOL_OPTS,
                                          multiple = TRUE)
     opts3$F_D176.V25 <- NULL
     opts3 <- append_list_recode("F_D176.V25", ucd_drug_alcohol,
-                                DRUG_ALCOHOL_KEY, opts3)
+                                MCD_PROVISIONAL_DRUG_ALCOHOL_KEY, opts3)
   } else if (ucd_option == "ICD-10 113 Cause List") {
     ucd_cause_113 <- rlang::arg_match(ucd_cause_113,
-                                      ICD10_113_LIST_OPTS,
+                                      MCD_PROVISIONAL_ICD10_113_LIST_OPTS,
                                       multiple = TRUE)
     opts3$V_D176.V4 <- NULL
     opts3 <- append_list_recode("V_D176.V4", ucd_cause_113,
-                                ICD10_113_LIST_KEY, opts3)
+                                MCD_PROVISIONAL_ICD10_113_LIST_KEY, opts3)
   } else if (ucd_option == "ICD-10 Codes") {
     opts3$F_D176.V2 <- NULL
     opts3 <- append_list("F_D176.V2", ucd_icd_codes, opts3)
@@ -123,18 +123,18 @@ process_ucd_mcod <- function(opts3,
 #' @param ucd_injury_mechanism One or more of
 #' `r paste("\x0a*", tothewonder:::INJURY_MECHANISM_OPTS, collapse = "")`
 #' @param ucd_drug_alcohol One or more of
-#' `r paste("\x0a*", tothewonder:::DRUG_ALCOHOL_OPTS, collapse = "")`
+#' `r paste("\x0a*", tothewonder:::MCD_PROVISIONAL_DRUG_ALCOHOL_OPTS, collapse = "")`
 #' @param ucd_icd_codes An ICD-10 code:
 #' Visit \url{https://wonder.cdc.gov/mcd-icd10-provisional.html}
 #' for the complete list
 #' @param ucd_cause_113 One or more of
-#' `r paste("\x0a*", tothewonder:::ICD10_113_LIST_OPTS, collapse = "")`
+#' `r paste("\x0a*", tothewonder:::MCD_PROVISIONAL_ICD10_113_LIST_OPTS, collapse = "")`
 #' @param mcd_option One or more of
 #' `r paste("\x0a*", tothewonder:::MCD_MCD_OPTS, collapse = "")`
 #' @param mcd_drug_alcohol One or more of
-#' `r paste("\x0a*", tothewonder:::DRUG_ALCOHOL_OPTS, collapse = "")`
+#' `r paste("\x0a*", tothewonder:::MCD_PROVISIONAL_DRUG_ALCOHOL_OPTS, collapse = "")`
 #' @param mcd_drug_alcohol_and One or more of
-#' `r paste("\x0a*", tothewonder:::DRUG_ALCOHOL_OPTS, collapse = "")`
+#' `r paste("\x0a*", tothewonder:::MCD_PROVISIONAL_DRUG_ALCOHOL_OPTS, collapse = "")`
 #' @param mcd_icd_codes An ICD-10 code: See
 #' \url{https://wonder.cdc.gov/mcd-icd10-provisional.html} for the complete list
 #' @param mcd_icd_codes_and An ICD-10 code: See
@@ -143,9 +143,9 @@ process_ucd_mcod <- function(opts3,
 #' @param mcd_infant_list Not implemented
 #' @param mcd_infant_list_and Not implemented
 #' @param mcd_cause_113 One or more of
-#' `r paste("\x0a*", tothewonder:::ICD10_113_LIST_OPTS, collapse = "")`
+#' `r paste("\x0a*", tothewonder:::MCD_PROVISIONAL_ICD10_113_LIST_OPTS, collapse = "")`
 #' @param mcd_cause_113_and One or more of
-#' `r paste("\x0a*", tothewonder:::ICD10_113_LIST_OPTS, collapse = "")`
+#' `r paste("\x0a*", tothewonder:::MCD_PROVISIONAL_ICD10_113_LIST_OPTS, collapse = "")`
 #' @param weekday deprecated
 #'
 #' @return A data.frame with the data from wonder
@@ -181,18 +181,22 @@ mcd_provisional <- function(wonder_url,
                             ucd_option = MCD_UCD_OPTS,
                             ucd_injury_intent = INJURY_INTENT_OPTS,
                             ucd_injury_mechanism = INJURY_MECHANISM_OPTS,
-                            ucd_drug_alcohol = DRUG_ALCOHOL_OPTS,
+                            ucd_drug_alcohol =
+                              MCD_PROVISIONAL_DRUG_ALCOHOL_OPTS,
                             ucd_icd_codes = "All",
-                            ucd_cause_113 = ICD10_113_LIST_OPTS,
+                            ucd_cause_113 = MCD_PROVISIONAL_ICD10_113_LIST_OPTS,
                             mcd_option = MCD_MCD_OPTS,
-                            mcd_drug_alcohol = DRUG_ALCOHOL_OPTS,
-                            mcd_drug_alcohol_and = DRUG_ALCOHOL_OPTS,
+                            mcd_drug_alcohol =
+                              MCD_PROVISIONAL_DRUG_ALCOHOL_OPTS,
+                            mcd_drug_alcohol_and =
+                              MCD_PROVISIONAL_DRUG_ALCOHOL_OPTS,
                             mcd_icd_codes = "All",
                             mcd_icd_codes_and = "All",
                             mcd_infant_list = "All",
                             mcd_infant_list_and = "All",
-                            mcd_cause_113 = ICD10_113_LIST_OPTS,
-                            mcd_cause_113_and = ICD10_113_LIST_OPTS) {
+                            mcd_cause_113 = MCD_PROVISIONAL_ICD10_113_LIST_OPTS,
+                            mcd_cause_113_and =
+                              MCD_PROVISIONAL_ICD10_113_LIST_OPTS) {
   if (!missing("weekday"))
     warning(paste0("`weekday` argument is deprecated. provisional ",
                    "data has no weekday argument"))
@@ -587,16 +591,16 @@ mcd_provisional <- function(wonder_url,
   opts3$O_mcd <- dplyr::recode(mcd_option, !!!MCD_MCD_KEY)
   if (mcd_option == "MCD - Drug/Alcohol Induced Causes") {
     mcd_drug_alcohol <- rlang::arg_match(mcd_drug_alcohol,
-                                         DRUG_ALCOHOL_OPTS,
+                                         MCD_PROVISIONAL_DRUG_ALCOHOL_OPTS,
                                          multiple = TRUE)
     mcd_drug_alcohol_and <- rlang::arg_match(mcd_drug_alcohol_and,
-                                         DRUG_ALCOHOL_OPTS,
+                                         MCD_PROVISIONAL_DRUG_ALCOHOL_OPTS,
                                          multiple = TRUE)
 
     opts3$"V_D176.V26" <- gsub(
       "%20", "+",
       utils::URLencode(
-        dplyr::recode(mcd_drug_alcohol, !!!DRUG_ALCOHOL_KEY),
+        dplyr::recode(mcd_drug_alcohol, !!!MCD_PROVISIONAL_DRUG_ALCOHOL_KEY),
         reserved = TRUE
       )) |> paste0(collapse = "%0D%0A") # \r\n == %0D%0A
     opts3$"V_D176.V26" <- I(paste0(opts3$"V_D176.V26", "%0D%0A"))
@@ -606,7 +610,7 @@ mcd_provisional <- function(wonder_url,
     #   "+",
     #   dplyr::recode(
     #     mcd_drug_alcohol,
-    #     !!!DRUG_ALCOHOL_KEY
+    #     !!!MCD_PROVISIONAL_DRUG_ALCOHOL_KEY
     #   )
     # ),
     # collapse = "+\r\n"
@@ -615,7 +619,8 @@ mcd_provisional <- function(wonder_url,
     opts3$"V_D176.V26_AND" <- gsub(
       "%20", "+",
       utils::URLencode(
-        dplyr::recode(mcd_drug_alcohol_and, !!!DRUG_ALCOHOL_KEY),
+        dplyr::recode(mcd_drug_alcohol_and,
+                      !!!MCD_PROVISIONAL_DRUG_ALCOHOL_KEY),
         reserved = TRUE
       )) |> paste0(collapse = "%0D%0A") # \r\n == %0D%0A
 
@@ -625,17 +630,17 @@ mcd_provisional <- function(wonder_url,
     #   "+",
     #   dplyr::recode(
     #     mcd_drug_alcohol_and,
-    #     !!!DRUG_ALCOHOL_KEY
+    #     !!!MCD_PROVISIONAL_DRUG_ALCOHOL_KEY
     #   )
     # ),
     # collapse = "+\r\n"
     # ))
   } else if (mcd_option == "MCD - ICD-10 113 Cause List") {
     mcd_cause_113 <- rlang::arg_match(mcd_cause_113,
-                                 ICD10_113_LIST_OPTS,
+                                 MCD_PROVISIONAL_ICD10_113_LIST_OPTS,
                                  multiple = TRUE)
     mcd_cause_113_and <- rlang::arg_match(mcd_cause_113_and,
-                                          ICD10_113_LIST_OPTS,
+                                          MCD_PROVISIONAL_ICD10_113_LIST_OPTS,
                                           multiple = TRUE)
 
     opts3$"V_D176.V15" <- gsub(
@@ -643,7 +648,7 @@ mcd_provisional <- function(wonder_url,
       utils::URLencode(
         dplyr::recode(
           mcd_cause_113,
-          !!!ICD10_113_LIST_KEY
+          !!!MCD_PROVISIONAL_ICD10_113_LIST_KEY
         ),
         reserved = TRUE
       )) |> paste0(collapse = "%0D%0A") # \r\n == %0D%0A
@@ -653,7 +658,7 @@ mcd_provisional <- function(wonder_url,
       utils::URLencode(
         dplyr::recode(
           mcd_cause_113_and,
-          !!!ICD10_113_LIST_KEY
+          !!!MCD_PROVISIONAL_ICD10_113_LIST_KEY
         ),
         reserved = TRUE
       )) |> paste0(collapse = "%0D%0A") # \r\n == %0D%0A
