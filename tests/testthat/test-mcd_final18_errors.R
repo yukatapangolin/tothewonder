@@ -42,6 +42,9 @@ test_that("final multiple cause of death function errors", {
                            weekday = "Octidi"),
                "`weekday` must be one of")
   expect_error(mcd_final18(wonder_url = fake_session,
+                           race_option = c("Single Race 6", "Single Race 15")),
+               "`race_option` must be one of ")
+  expect_error(mcd_final18(wonder_url = fake_session,
                            autopsy = "Maybe"),
                "`autopsy` must be one of ")
   expect_error(mcd_final18(wonder_url = fake_session,
@@ -93,6 +96,9 @@ test_that("final multiple cause of death function errors", {
 
   expect_no_warning(
     check_mcd_provisional_icd_codes(c("S00-T98", "E00-E89"))
+  )
+  expect_no_warning(
+    check_mcd_provisional_icd_codes(c("C00-C97"))
   )
   expect_warning(check_mcd_provisional_icd_codes(
     c("dsafasdf", "sadfd")),

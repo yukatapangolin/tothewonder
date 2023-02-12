@@ -24,8 +24,11 @@ process_ucd_mcod <- function(opts3,
   }
   opts3$`O_ucd` <- dplyr::recode(ucd_option, !!!MCD_UCD_KEY)
   if (ucd_option == "Injury Intent and Mechanism") {
-    rlang::arg_match(ucd_injury_intent, INJURY_INTENT_OPTS, multiple = TRUE)
-    rlang::arg_match(ucd_injury_mechanism, INJURY_MECHANISM_OPTS,
+    ucd_injury_intent <- rlang::arg_match(ucd_injury_intent,
+                                          INJURY_INTENT_OPTS,
+                                          multiple = TRUE)
+    ucd_injury_mechanism <- rlang::arg_match(ucd_injury_mechanism,
+                                             INJURY_MECHANISM_OPTS,
       multiple =
         TRUE
     )
@@ -38,12 +41,16 @@ process_ucd_mcod <- function(opts3,
       opts3
     )
   } else if (ucd_option == "Drug/Alcohol Induced Causes") {
-    rlang::arg_match(ucd_drug_alcohol, DRUG_ALCOHOL_OPTS, multiple = TRUE)
+    ucd_drug_alcohol <- rlang::arg_match(ucd_drug_alcohol,
+                                         DRUG_ALCOHOL_OPTS,
+                                         multiple = TRUE)
     opts3$F_D176.V25 <- NULL
     opts3 <- append_list_recode("F_D176.V25", ucd_drug_alcohol,
                                 DRUG_ALCOHOL_KEY, opts3)
   } else if (ucd_option == "ICD-10 113 Cause List") {
-    rlang::arg_match(ucd_cause_113, ICD10_113_LIST_OPTS, multiple = TRUE)
+    ucd_cause_113 <- rlang::arg_match(ucd_cause_113,
+                                      ICD10_113_LIST_OPTS,
+                                      multiple = TRUE)
     opts3$V_D176.V4 <- NULL
     opts3 <- append_list_recode("V_D176.V4", ucd_cause_113,
                                 ICD10_113_LIST_KEY, opts3)
@@ -233,11 +240,11 @@ mcd_provisional <- function(wonder_url,
   opts3 <- MCD_FORM_OPTIONS
 
   ##########################################################################
-  ## params for group by
-  rlang::arg_match(group_by_1, MCD_GROUP_BY_1_OPTS)
-  rlang::arg_match(group_by_2, MCD_GROUP_BY_2_OPTS)
-  rlang::arg_match(group_by_3, MCD_GROUP_BY_2_OPTS)
-  rlang::arg_match(group_by_4, MCD_GROUP_BY_2_OPTS)
+  ## parameters for group by
+  group_by_1 <- rlang::arg_match(group_by_1, MCD_GROUP_BY_1_OPTS)
+  group_by_2 <- rlang::arg_match(group_by_2, MCD_GROUP_BY_2_OPTS)
+  group_by_3 <- rlang::arg_match(group_by_3, MCD_GROUP_BY_2_OPTS)
+  group_by_4 <- rlang::arg_match(group_by_4, MCD_GROUP_BY_2_OPTS)
 
   v <- c(group_by_1, group_by_2, group_by_3, group_by_4)
   if (length(v[v != "None"]) != length(unique(v[v != "None"]))) {
@@ -267,8 +274,10 @@ mcd_provisional <- function(wonder_url,
 
   ############################################################################
   ## FIPS residence code for states/counties
-  rlang::arg_match(residence_urbanization_year, c("2006", "2013"))
-  rlang::arg_match(residence_urbanization, URBANIZATION_OPTS, multiple = TRUE)
+  residence_urbanization_year <-
+    rlang::arg_match(residence_urbanization_year, c("2006", "2013"))
+  residence_urbanization <-
+    rlang::arg_match(residence_urbanization, URBANIZATION_OPTS, multiple = TRUE)
   ## Add a leading zero to FIPS codes if length eq 4
   residence_fips <- ifelse(nchar(residence_fips) == 4,
     paste0("0", residence_fips),
@@ -318,8 +327,12 @@ mcd_provisional <- function(wonder_url,
 
   ##########################################################
   ## FIPS occurrence  for states/counties
-  rlang::arg_match(occurrence_urbanization_year, c("2006", "2013"))
-  rlang::arg_match(occurrence_urbanization, URBANIZATION_OPTS, multiple = TRUE)
+  occurrence_urbanization_year <-
+    rlang::arg_match(occurrence_urbanization_year, c("2006", "2013"))
+  occurrence_urbanization <-
+    rlang::arg_match(occurrence_urbanization,
+                     URBANIZATION_OPTS,
+                     multiple = TRUE)
   occurrence_fips <- ifelse(nchar(occurrence_fips) == 4,
     paste0("0", occurrence_fips),
     as.character(occurrence_fips)
@@ -359,7 +372,7 @@ mcd_provisional <- function(wonder_url,
   if (!is.character(age)) {
     age <- as.character(age)
   }
-  rlang::arg_match(age, ALL_AGE_GROUPS_OPTS, multiple = TRUE)
+  age <- rlang::arg_match(age, ALL_AGE_GROUPS_OPTS, multiple = TRUE)
   ## age param
   ## Population and Rates are not available when values are selected for
   ## Single-Year Ages or Ten-Year Age Groups in section 3, so default to
@@ -408,12 +421,14 @@ mcd_provisional <- function(wonder_url,
 
   ##########################################################################
   ## Gender
-  rlang::arg_match(gender, GENDER_OPTS, multiple = TRUE)
+  gender <- rlang::arg_match(gender, GENDER_OPTS, multiple = TRUE)
   opts3 <- append_list_recode("V_D176.V7", gender, GENDER_KEY, opts3)
 
   ###########################################################################
   ## Hispanic
-  rlang::arg_match(hispanic_origin, HISPANIC_ORIGIN_OPTS, multiple = TRUE)
+  hispanic_origin <- rlang::arg_match(hispanic_origin,
+                                      HISPANIC_ORIGIN_OPTS,
+                                      multiple = TRUE)
   opts3 <- append_list_recode(
     "V_D176.V17",
     hispanic_origin, HISPANIC_ORIGIN_KEY, opts3
@@ -421,21 +436,21 @@ mcd_provisional <- function(wonder_url,
 
   ##########################################################################
   ## race
-  rlang::arg_match(race_option, RACE_OPTIONS_OPTS, multiple = TRUE)
+  race_option <- rlang::arg_match(race_option, RACE_OPTIONS_OPTS)
   if (race_option == "Single Race 6") {
-    rlang::arg_match(race, SINGLE_RACE_6_OPTS, multiple = TRUE)
+    race <- rlang::arg_match(race, SINGLE_RACE_6_OPTS, multiple = TRUE)
     opts3$`O_race` <- "D176.V42"
     opts3$`V_D176.V43` <- "*All*"
     opts3$`V_D176.V44` <- "*All*"
     opts3 <- append_list_recode("V_D176.V42", race, SINGLE_RACE_6_KEY, opts3)
   } else if (race_option == "Single Race 15") {
-    rlang::arg_match(race, SINGLE_RACE_15_OPTS, multiple = TRUE)
+    race <- rlang::arg_match(race, SINGLE_RACE_15_OPTS, multiple = TRUE)
     opts3$`O_race` <- "D176.V43"
     opts3$`V_D176.V42` <- "*All*"
     opts3$`V_D176.V44` <- "*All*"
     opts3 <- append_list_recode("V_D176.V43", race, SINGLE_RACE_15_KEY, opts3)
   } else if (race_option == "Single/Multi Race 31") {
-    rlang::arg_match(race, SINGLE_MULTI_RACE_31_OPTS, multiple = TRUE)
+    race <- rlang::arg_match(race, SINGLE_MULTI_RACE_31_OPTS, multiple = TRUE)
     opts3$`O_race` <- "D176.V44"
     opts3$`V_D176.V42` <- "*All*"
     opts3$`V_D176.V43` <- "*All*"
@@ -450,7 +465,7 @@ mcd_provisional <- function(wonder_url,
   ## period param
   ## check period is in the right format
 
-  rlang::arg_match(period_option, c("Year", "MMWR"), multiple = TRUE)
+  period_option <- rlang::arg_match(period_option, c("Year", "MMWR"))
   if (period_option == "Year") {
     if (any(period == "All")) {
       period <- "*All*"
@@ -527,12 +542,14 @@ mcd_provisional <- function(wonder_url,
 
   ##########################################################################
   ## autopsy
-  rlang::arg_match(autopsy, AUTOPSY_OPTS, multiple = TRUE)
+  autopsy <- rlang::arg_match(autopsy, AUTOPSY_OPTS, multiple = TRUE)
   opts3 <- append_list_recode("V_D176.V20", autopsy, AUTOPSY_KEY, opts3)
 
   ##########################################################################
   ## place of death
-  rlang::arg_match(place_of_death, PLACE_OF_DEATH_OPTS, multiple = TRUE)
+  place_of_death <- rlang::arg_match(place_of_death,
+                                     PLACE_OF_DEATH_OPTS,
+                                     multiple = TRUE)
   opts3 <- append_list_recode(
     "V_D176.V21", place_of_death,
     PLACE_OF_DEATH_KEY, opts3
@@ -540,7 +557,7 @@ mcd_provisional <- function(wonder_url,
 
   ##########################################################################
   ## Underlying cause of death
-  rlang::arg_match(ucd_option, MCD_UCD_OPTS)
+  ucd_option <- rlang::arg_match(ucd_option, MCD_UCD_OPTS)
   if (ucd_option == "ICD-10 Codes") {
     if (any(ucd_icd_codes == "All")) {
       ucd_icd_codes <- "*All*"
@@ -565,12 +582,16 @@ mcd_provisional <- function(wonder_url,
 
   ##########################################################################
   ## Multiple cause of death
-  rlang::arg_match(mcd_option, MCD_MCD_OPTS)
+  mcd_option <- rlang::arg_match(mcd_option, MCD_MCD_OPTS)
 
   opts3$O_mcd <- dplyr::recode(mcd_option, !!!MCD_MCD_KEY)
   if (mcd_option == "MCD - Drug/Alcohol Induced Causes") {
-    rlang::arg_match(mcd_drug_alcohol, DRUG_ALCOHOL_OPTS, multiple = TRUE)
-    rlang::arg_match(mcd_drug_alcohol_and, DRUG_ALCOHOL_OPTS, multiple = TRUE)
+    mcd_drug_alcohol <- rlang::arg_match(mcd_drug_alcohol,
+                                         DRUG_ALCOHOL_OPTS,
+                                         multiple = TRUE)
+    mcd_drug_alcohol_and <- rlang::arg_match(mcd_drug_alcohol_and,
+                                         DRUG_ALCOHOL_OPTS,
+                                         multiple = TRUE)
 
     opts3$"V_D176.V26" <- gsub(
       "%20", "+",
@@ -610,8 +631,12 @@ mcd_provisional <- function(wonder_url,
     # collapse = "+\r\n"
     # ))
   } else if (mcd_option == "MCD - ICD-10 113 Cause List") {
-    rlang::arg_match(mcd_cause_113, ICD10_113_LIST_OPTS, multiple = TRUE)
-    rlang::arg_match(mcd_cause_113_and, ICD10_113_LIST_OPTS, multiple = TRUE)
+    mcd_cause_113 <- rlang::arg_match(mcd_cause_113,
+                                 ICD10_113_LIST_OPTS,
+                                 multiple = TRUE)
+    mcd_cause_113_and <- rlang::arg_match(mcd_cause_113_and,
+                                          ICD10_113_LIST_OPTS,
+                                          multiple = TRUE)
 
     opts3$"V_D176.V15" <- gsub(
       "%20", "+",
@@ -697,7 +722,7 @@ mcd_provisional <- function(wonder_url,
               "F_D176.V79", STATE_FIPS, wonder_url)
 
     VALID_YEARS <- wonder_years("D176")
-    if (any(as.numeric(gsub(
+    if (!identical(period, "*All*") && any(as.numeric(gsub(
       "([0-9]{4}).*", "\\1",
       period
     )) > max(as.numeric(VALID_YEARS)))) {

@@ -32,8 +32,17 @@ test_that("provisional multiple cause of death function errors", {
                                race_option = "MMWR Week"),
                "`race_option` must be one of")
   expect_error(mcd_provisional(wonder_url = fake_session,
+                           race_option = c("Single Race 6", "Single Race 15")),
+               "`race_option` must be one of ")
+  expect_error(mcd_provisional(wonder_url = fake_session,
                                race = "Australoid"),
                "race` must be one of")
+  expect_error(mcd_provisional(wonder_url = fake_session,
+                               period_option = c("Year", "MMWR1")),
+               "`period_option` must be one of ")
+  expect_error(mcd_provisional(wonder_url = fake_session,
+                               period = "Year"),
+               "period must follow the pattern ")
   expect_error(mcd_provisional(wonder_url = fake_session,
                                period = "2009/001"),
                "period must follow the pattern ")

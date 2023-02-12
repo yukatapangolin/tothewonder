@@ -30,27 +30,34 @@ check_params <- function(wonder_url,
       collapse = ", "
     )))
   }
-  rlang::arg_match(group_by_1, GROUP_BY_1_OPTS)
-  rlang::arg_match(group_by_2, GROUP_BY_2_OPTS)
-  rlang::arg_match(group_by_3, GROUP_BY_2_OPTS)
-  rlang::arg_match(group_by_4, GROUP_BY_2_OPTS)
+  group_by_1 <- rlang::arg_match(group_by_1, GROUP_BY_1_OPTS)
+  group_by_2 <- rlang::arg_match(group_by_2, GROUP_BY_2_OPTS)
+  group_by_3 <- rlang::arg_match(group_by_3, GROUP_BY_2_OPTS)
+  group_by_4 <- rlang::arg_match(group_by_4, GROUP_BY_2_OPTS)
   stopifnot(is.logical(show_age_adjusted))
   stopifnot(is.logical(show_totals))
   stopifnot(is.logical(show_confidence_interval))
   stopifnot(is.logical(show_standard_error))
-  rlang::arg_match(gender, GENDER_OPTS, multiple = TRUE)
-  rlang::arg_match(residence_urbanization_year, c("2006", "2013"))
-  rlang::arg_match(residence_urbanization, URBANIZATION_OPTS, multiple = TRUE)
+  gender <- rlang::arg_match(gender, GENDER_OPTS, multiple = TRUE)
+  residence_urbanization_year <- rlang::arg_match(residence_urbanization_year,
+                                                  c("2006", "2013"))
+  residence_urbanization <- rlang::arg_match(residence_urbanization,
+                                             URBANIZATION_OPTS,
+                                             multiple = TRUE)
   if (!is.character(age)) {
     age <- as.character(age)
   }
-  rlang::arg_match(age, ALL_AGE_GROUPS_OPTS, multiple = TRUE)
-  rlang::arg_match(hispanic_origin, HISPANIC_ORIGIN_OPTS, multiple = TRUE)
-  rlang::arg_match(race, RACE_OPTS, multiple = TRUE)
-  rlang::arg_match(weekday, WEEKDAY_OPTS, multiple = TRUE)
-  rlang::arg_match(autopsy, AUTOPSY_OPTS, multiple = TRUE)
-  rlang::arg_match(place_of_death, PLACE_OF_DEATH_OPTS, multiple = TRUE)
-  rlang::arg_match(ucd_option, UCD_OPTS)
+  age <- rlang::arg_match(age, ALL_AGE_GROUPS_OPTS, multiple = TRUE)
+  hispanic_origin <- rlang::arg_match(hispanic_origin,
+                                      HISPANIC_ORIGIN_OPTS,
+                                      multiple = TRUE)
+  race <- rlang::arg_match(race, RACE_OPTS, multiple = TRUE)
+  weekday <- rlang::arg_match(weekday, WEEKDAY_OPTS, multiple = TRUE)
+  autopsy <- rlang::arg_match(autopsy, AUTOPSY_OPTS, multiple = TRUE)
+  place_of_death <- rlang::arg_match(place_of_death,
+                                     PLACE_OF_DEATH_OPTS,
+                                     multiple = TRUE)
+  ucd_option <- rlang::arg_match(ucd_option, UCD_OPTS)
 
   ## Build the query
   opts2 <- UCD_FORM_OPTIONS
@@ -265,9 +272,12 @@ process_ucd <- function(opts2,
   }
   opts2$`O_ucd` <- dplyr::recode(ucd_option, !!!UCD_KEY)
   if (ucd_option == "Injury Intent and Mechanism") {
-    rlang::arg_match(ucd_injury_intent, INJURY_INTENT_OPTS, multiple = TRUE)
-    rlang::arg_match(ucd_injury_mechanism, INJURY_MECHANISM_OPTS,
-      multiple = TRUE
+    ucd_injury_intent <- rlang::arg_match(ucd_injury_intent,
+                                          INJURY_INTENT_OPTS,
+                                          multiple = TRUE)
+    ucd_injury_mechanism <- rlang::arg_match(ucd_injury_mechanism,
+                                             INJURY_MECHANISM_OPTS,
+                                             multiple = TRUE
     )
     opts2 <- set_ucd__opts(
       list(
@@ -278,7 +288,9 @@ process_ucd <- function(opts2,
       opts2
     )
   } else if (ucd_option == "Drug/Alcohol Induced Causes") {
-    rlang::arg_match(ucd_drug_alcohol, DRUG_ALCOHOL_OPTS, multiple = TRUE)
+    ucd_drug_alcohol <- rlang::arg_match(ucd_drug_alcohol,
+                                         DRUG_ALCOHOL_OPTS,
+                                         multiple = TRUE)
     opts2 <- set_ucd__opts(
       list(
         list(ucd_drug_alcohol),
@@ -288,7 +300,9 @@ process_ucd <- function(opts2,
       opts2
     )
   } else if (ucd_option == "ICD-10 113 Cause List") {
-    rlang::arg_match(ucd_cause_113, ICD10_113_LIST_OPTS, multiple = TRUE)
+    ucd_cause_113 <- rlang::arg_match(ucd_cause_113,
+                                      ICD10_113_LIST_OPTS,
+                                      multiple = TRUE)
     opts2 <- set_ucd__opts(
       list(
         list(ucd_cause_113),
