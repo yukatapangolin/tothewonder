@@ -6,7 +6,9 @@ Authors@R:
            family = "Pangolin",
            role = c("aut", "cre"),
            email = "yukatapangolin@tutanota"))
-Description: Support for querying and saving data from CDC WONDER. A function is also provided for saving queries as URLs. See <https://wonder.cdc.gov>.
+Description: Support for querying and dowloading data from CDC WONDER. 
+    Functions for saving queries to use later or to share with others as URLs 
+    are also provided. See <https://wonder.cdc.gov>.
 License: AGPL (>= 3)
 Suggests: 
     knitr,

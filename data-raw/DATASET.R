@@ -16,13 +16,13 @@ local({
   source("data-raw/DATASET_FIPS.R", local = TRUE)
   # read FIPS as character because of leading zero's
   counties <- read.csv("data-raw/counties.txt",
-    sep = "\t",
-    colClasses = c("character")
+                       sep = "\t",
+                       colClasses = c("character")
   )
   COUNTIES_FIPS <- counties$County.Code[counties$County.Code != ""]
   states <- read.csv("data-raw/states.txt",
-    sep = "\t",
-    colClasses = c("character")
+                     sep = "\t",
+                     colClasses = c("character")
   )
   STATES_FIPS <- states$State.Code[states$State.Code != ""]
 
@@ -122,4 +122,37 @@ local({
     version = 3,
     overwrite = TRUE
   )
+})
+
+local({
+  source("data-raw/DATASET_HHS_CR.R", local = TRUE)
+  source("data-raw/DATASET_FIPS.R", local = TRUE)
+  usethis::use_data(
+    US_STATES_FIPS,
+    HHS1,
+    HHS2,
+    HHS3,
+    HHS4,
+    HHS5,
+    HHS6,
+    HHS7,
+    HHS8,
+    HHS9,
+    HHS10,
+    CENS_D1,
+    CENS_D2,
+    CENS_D3,
+    CENS_D4,
+    CENS_D5,
+    CENS_D6,
+    CENS_D7,
+    CENS_D8,
+    CENS_D9,
+    CENS_R1,
+    CENS_R2,
+    CENS_R3,
+    CENS_R4,
+    compress    = "xz",
+    version = 3,
+    overwrite = TRUE)
 })

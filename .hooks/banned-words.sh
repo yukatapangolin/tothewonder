@@ -8,6 +8,8 @@ bad_words=(socks
            "fuck"
            "\bshit\b"
            "exterminate"
+           "localhost"
+           "murder"
            "data-raw/ERS10/ERS-2010-2fcqzlr.tar.xz"
            "data-raw/ERS10/counties10-zqvz0r.csv"
            "data-raw/2020_US_County_Level_Presidential_Results.csv"

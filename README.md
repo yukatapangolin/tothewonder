@@ -37,11 +37,25 @@ To use this package you’ll need to *start a session at the CDC WONDER
 website* and agree to their [data use
 restrictions](https://wonder.cdc.gov/DataUse.html)
 
-*Note that it’s possible this package violates the terms of use of the
+Depending on which database you want to access you can use one of the
+following functions to start a session:
+
+`session_ucd99` - [Underlying Cause of Death,
+1999-2020](https://wonder.cdc.gov/ucd-icd10.html)
+
+`session_mcd_provisional` - [Provisional Mortality Statistics, 2018
+through Last Month](https://wonder.cdc.gov/mcd-icd10-provisional.html)
+
+`session_mcd_final18` - [Multiple Cause of Death, 2018-2021, Single
+Race](https://wonder.cdc.gov/mcd-icd10-expanded.html)
+
+Note that it’s possible this package violates the terms of use of the
 CDC WONDER website since they have a [public
 API](https://wonder.cdc.gov/wonder/help/WONDER-API.html) that’s
 restricted to only return data at the national level and this package
-allows you retrieve county-level data*
+allows you retrieve sub-national data, but the [web
+application](https://wonder.cdc.gov) already lets you retrieve
+sub-national and it’s probably no big deal to use this package
 
 > However, in keeping with the vital statistics policy for public data
 > sharing, only national data are available for query by the API.
@@ -52,15 +66,18 @@ allows you retrieve county-level data*
 > example, in the D76 online database for Detailed Mortality 1999-2013,
 > the location fields are D76.V9, D76.V10 and D76.V27, and the
 > urbanization fields are D76.V11 and D76.V19. These ’sub-national" data
-> fields cannot be grouped by or limited via the API, although these
-> fields are available in the web application.
+> fields cannot be grouped by or limited via the API, although *these
+> fields are available in the web application*.
 > <https://wonder.cdc.gov/wonder/help/WONDER-API.html>
 
-It’s the opinion of the `tothewonder` author that this makes the API
-useless and this package has no such restrictions. The author of this
-package furthermore believes that this restriction was put in place
-thanks to RUSSIAN PUPPET PRESIDENT DONALD TRUMP to prevent researchers
-from investigating GUN VIOLENCE.
+It’s the opinion of the `tothewonder` author that these restrictions
+make the official API useless. Additionally, since the web application
+already permits querying at the sub-national level the author sees no
+problem in automating this type of query as long as users follow the
+[data use restrictions](https://wonder.cdc.gov/DataUse.html). The author
+of this package furthermore believes that these limitations were put in
+place thanks to RUSSIAN PUPPET PRESIDENT DONALD TRUMP to prevent
+researchers from investigating GUN VIOLENCE.
 
 > *Sanctions for Violating Rules:*
 
@@ -144,7 +161,6 @@ df <- mcd_provisional(wonder_url = wonder_url_mcd18,
                       occurrence_fips = "All",
                       occurrence_urbanization_year = c("2013"),
                       occurrence_urbanization = "All Categories",
-                      weekday = c("All Weekdays"),
                       autopsy = c("All Values"),
                       place_of_death = c("All Places"),
                       gender = c("All Genders"),
@@ -163,7 +179,7 @@ You can also save queries to a unique link that leads to the WONDER
 website by using the `save` parameter
 
 ``` r
-wonder_url <- session_ucd99(I_Agree = TRUE)
+wonder_url <- session_ucd99()
 ucd99(wonder_url = wonder_url,
       save = TRUE,
       group_by_1 = "Year",
@@ -252,9 +268,9 @@ deaths |>
   geom_line(linewidth = .9) +
   labs(title = "Male Firearm Homicide Rate by 2020 Presidential County Vote",
        subtitle = paste0("Counties that voted for Trump in 2020",
-                            " experienced smaller homicide increases."),
+                         " experienced smaller homicide increases."),
        caption = paste0("Source: CDC WONDER. ",
-                           "2018-2021 Final Multiple Cause of Death Files")) +
+                        "2018-2021 Final Multiple Cause of Death Files")) +
   expand_limits(y = 0) +
   scale_color_manual(
     values = c("#244999",
