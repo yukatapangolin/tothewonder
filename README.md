@@ -40,19 +40,22 @@ restrictions](https://wonder.cdc.gov/DataUse.html)
 Depending on which database you want to access you can use one of the
 following functions to start a session:
 
-`session_ucd99` - [Underlying Cause of Death,
+`session_ucd99()` - [Underlying Cause of Death,
 1999-2020](https://wonder.cdc.gov/ucd-icd10.html)
 
-`session_mcd_provisional` - [Provisional Mortality Statistics, 2018
+`session_mcd_provisional()` - [Provisional Mortality Statistics, 2018
 through Last Month](https://wonder.cdc.gov/mcd-icd10-provisional.html)
 
-`session_mcd_final18` - [Multiple Cause of Death, 2018-2021, Single
+`session_mcd_final18()` - [Multiple Cause of Death, 2018-2021, Single
 Race](https://wonder.cdc.gov/mcd-icd10-expanded.html)
+
+After agreeing to abide by the data use restrictions the functions will
+return a string with the CDC WONDER session URL.
 
 Note that it’s possible this package violates the terms of use of the
 CDC WONDER website since they have a [public
 API](https://wonder.cdc.gov/wonder/help/WONDER-API.html) that’s
-restricted to only return data at the national level and this package
+restricted to only return data at the national level and `tothewonder`
 allows you retrieve sub-national data, but the [web
 application](https://wonder.cdc.gov) already lets you retrieve
 sub-national and it’s probably no big deal to use this package
@@ -111,11 +114,11 @@ library(tothewonder)
 
 ## Start a UCD (https://wonder.cdc.gov/ucd-icd10.html) session and
 ## agree to the data use restrictions
-wonder_url <- session_ucd99()
+url_ucd99 <- session_ucd99()
 ## Download monthly non-Hispanic Black firearm deaths data for
 ## Missouri (FIPS code 29). This would include homicides, suicides, accidents
 ## and legal intervertions/operations of war. Singel Age Years 15-55 only
-df <- ucd99(wonder_url = wonder_url,
+df <- ucd99(wonder_url = url_ucd99,
             group_by_1 = "Year",
             group_by_2 = "Month",
             group_by_3 = "None",
@@ -140,11 +143,11 @@ df <- ucd99(wonder_url = wonder_url,
 )
 
 ## Start a session with the Provisional Mortality by Multiple Cause of Death db
-wonder_url_mcd18 <- session_mcd_provisional()
+url_provisional <- session_mcd_provisional()
 ## Download weekly data where the underlying cause of death was homicide, and
 ## where the victim was African American
 ## Only include the "15-24","25-34", and "35-44" ten year age groups
-df <- mcd_provisional(wonder_url = wonder_url_mcd18,
+df <- mcd_provisional(wonder_url = url_provisional,
                       group_by_1 = "MMWR Week",
                       group_by_2 = "None",
                       group_by_3 = "None",
@@ -179,8 +182,8 @@ You can also save queries to a unique link that leads to the WONDER
 website by using the `save` parameter
 
 ``` r
-wonder_url <- session_ucd99()
-ucd99(wonder_url = wonder_url,
+save_session <- session_ucd99()
+ucd99(wonder_url = save_session,
       save = TRUE,
       group_by_1 = "Year",
       group_by_2 = "Month",
@@ -242,14 +245,14 @@ trump_2020 <- subset(trump_2020, state_name != "Alaska")
 ## https://en.wikipedia.org/wiki/Oglala_Lakota_County,_South_Dakota
 trump_2020$county_fips[which(trump_2020$county_fips == 46102)] <- 46113
 
-wonder_url_mcod18 <- session_mcd_final18(I_Agree = TRUE)
+url_mcd18 <- session_mcd_final18(I_Agree = TRUE)
 
 deaths <- map_dfr( unique(trump_2020$winner), .f = \(x) {
     counties <- unique(subset(trump_2020, winner == x))$county_fips
     ## Parameters to functions use the same defaults
     ## as the ones available at CDC WONDER and you
     ## can omit them
-    df <- mcd_final18(wonder_url = wonder_url_mcod18,
+    df <- mcd_final18(wonder_url = url_mcd18,
                       save = FALSE,
                       group_by_1 = "Year",
                       period = 2018:2021,
