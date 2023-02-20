@@ -352,55 +352,7 @@ mcd_final18 <- function(wonder_url,
   ###########################################################################
   ## Age
   stopifnot(is.logical(show_age_adjusted))
-  if (!is.character(age)) {
-    age <- as.character(age)
-  }
-  age <- rlang::arg_match(age, ALL_AGE_GROUPS_OPTS, multiple = TRUE)
-  ## age param
-  ## Population and Rates are not available when values are selected for
-  ## Single-Year Ages or Ten-Year Age Groups in section 3 so default to
-  ## five-year age groups
-  if (all(age %in% FIVE_YEAR_AGE_GROUPS_OPTS)) {
-    for (i in age) {
-      opts3[length(opts3) + 1] <- dplyr::recode(i, !!!FIVE_YEAR_AGE_GROUPS_KEY)
-      names(opts3)[length(opts3)] <- "V_D157.V51"
-      opts3$`O_age` <- "D157.V51"
-      opts3$`O_aar` <- "aar_none"
-    }
-  }  else if (all(age %in% TEN_YEAR_AGE_GROUPS_OPTS)) {
-    for (i in age) {
-      opts3[length(opts3) + 1] <- dplyr::recode(i, !!!TEN_YEAR_AGE_GROUPS_KEY)
-      names(opts3)[length(opts3)] <- "V_D157.V5"
-      opts3$`O_age` <- "D157.V5"
-    }
-    # Add age adjusted column if 2 or more ten-year age groups are requested
-    if ((length(age) >= 2 || identical(age, "All Ages")) && show_age_adjusted) {
-      opts3$`O_aar_enable` <- "true"
-      opts3$`O_aar` <- "aar_std"
-      opts3$`O_aar_CI` <- "true"
-      opts3$`O_aar_SE` <- "true"
-    } else {
-      opts3$`O_aar` <- "aar_none"
-      opts3$`O_aar_CI` <- "false"
-      opts3$`O_aar_SE` <- "false"
-    }
-  } else if (all(age %in% SINGLE_YEAR_AGES_OPTS)) {
-    for (i in age) {
-      opts3[length(opts3) + 1] <- dplyr::recode(i, !!!SINGLE_YEAR_AGES_KEY)
-      names(opts3)[length(opts3)] <- "V_D157.V52"
-      opts3$`O_age` <- "D157.V52"
-      opts3$`O_aar` <- "aar_none"
-    }
-  } else if (all(age %in% INFANT_AGE_GROUPS_OPTS)) {
-    for (i in age) {
-      opts3[length(opts3) + 1] <- dplyr::recode(i, !!!INFANT_AGE_GROUPS_KEY)
-      names(opts3)[length(opts3)] <- "V_D157.V6"
-      opts3$`O_age` <- "D157.V6"
-      opts3$`O_aar` <- "aar_none"
-    }
-  } else {
-    stop("Invalid age groups")
-  }
+  opts3 <- age_option(age, show_age_adjusted, "157", opts3)
 
   ##########################################################################
   ## Gender
