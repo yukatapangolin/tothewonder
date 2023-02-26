@@ -24,7 +24,7 @@ knitr::opts_chunk$set(
 
 ---
 
-_➔ [Check out the discussion board](https://github.com/yukatapangolin/tothewonder/discussions)_
+##### ➔ [Check out the discussion board](https://github.com/yukatapangolin/tothewonder/discussions)
 
 
 ---

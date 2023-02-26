@@ -12,8 +12,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 
 -----
 
-*➔ [Check out the discussion
-board](https://github.com/yukatapangolin/tothewonder/discussions)*
+##### ➔ [Check out the discussion board](https://github.com/yukatapangolin/tothewonder/discussions)
 
 -----
 
