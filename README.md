@@ -10,6 +10,13 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 [![R-CMD-check](https://github.com/yukatapangolin/tothewonder/workflows/R-CMD-check/badge.svg)](https://github.com/yukatapangolin/tothewonder/actions)
 <!-- badges: end -->
 
+-----
+
+*➔ [Check out the discussion
+board](https://github.com/yukatapangolin/tothewonder/discussions)*
+
+-----
+
 The goal of `tothewonder` is to make it easy to access [CDC
 WONDER](https://wonder.cdc.gov) mortality statistics. This package was
 created to protest the REPUBLICAN and NRA led efforts to suppress
