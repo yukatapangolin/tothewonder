@@ -1,4 +1,5 @@
-age_option <- function(age, show_age_adjusted, db_num, opts3) {
+age_option <- function(age, show_age_adjusted, db_num, opts3,
+                       group_by_1, group_by_2, group_by_3, group_by_4) {
   if (!is.character(age)) {
     age <- as.character(age)
   }
@@ -8,6 +9,16 @@ age_option <- function(age, show_age_adjusted, db_num, opts3) {
                 " the ten-year age groups"))
   ## auto generate age_group_option
   age_opt <- dplyr::case_when(
+    any(grepl("Five-Year", c(group_by_1, group_by_2,
+                        group_by_3, group_by_4))) ~ "Five-Year Age Groups",
+    any(grepl("Ten-Year", c(group_by_1, group_by_2,
+                        group_by_3, group_by_4))) ~ "Ten-Year Age Groups",
+    any(grepl("Single-Year", c(group_by_1,
+                               group_by_2,
+                               group_by_3,
+                               group_by_4))) ~ "Single-Year Age Groups",
+    any(grepl("Infant", c(group_by_1, group_by_2,
+                          group_by_3, group_by_4))) ~ "Infant Age Groups",
     # County populations are only available for five-year age groups
     # and all age groups share the age group "< 1". If age is only
     # "< 1" we have to set as a five-year age group

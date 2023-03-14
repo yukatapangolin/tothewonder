@@ -352,7 +352,8 @@ mcd_final18 <- function(wonder_url,
   ###########################################################################
   ## Age
   stopifnot(is.logical(show_age_adjusted))
-  opts3 <- age_option(age, show_age_adjusted, "157", opts3)
+  opts3 <- age_option(age, show_age_adjusted, "157", opts3,
+                      group_by_1, group_by_2, group_by_3, group_by_4)
 
   ##########################################################################
   ## Gender
