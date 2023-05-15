@@ -1,8 +1,8 @@
 "Notes"	"Year"	"Year Code"	Deaths	Population	Crude Rate
-	"1999"	"1999"	Suppressed	Not Applicable	Not Applicable
-	"2000"	"2000"	Suppressed	Not Applicable	Not Applicable
-	"2001"	"2001"	Suppressed	Not Applicable	Not Applicable
-	"2002"	"2002"	Suppressed	Not Applicable	Not Applicable
+	"1999"	"1999"	0	Not Applicable	Not Applicable
+	"2000"	"2000"	0	Not Applicable	Not Applicable
+	"2001"	"2001"	0	Not Applicable	Not Applicable
+	"2002"	"2002"	0	Not Applicable	Not Applicable
 	"2003"	"2003"	80640	Not Applicable	Not Applicable
 	"2004"	"2004"	81502	Not Applicable	Not Applicable
 	"2005"	"2005"	94153	Not Applicable	Not Applicable
