@@ -16,7 +16,7 @@ age_option <- function(age, show_age_adjusted, db_num, opts3,
     any(grepl("Single-Year", c(group_by_1,
                                group_by_2,
                                group_by_3,
-                               group_by_4))) ~ "Single-Year Age Groups",
+                               group_by_4))) ~ "Single-Year Ages",
     any(grepl("Infant", c(group_by_1, group_by_2,
                           group_by_3, group_by_4))) ~ "Infant Age Groups",
     # County populations are only available for five-year age groups
