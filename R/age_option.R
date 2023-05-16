@@ -24,7 +24,8 @@ age_option <- function(age, show_age_adjusted, db_num, opts3,
     # "< 1" we have to set as a five-year age group
     identical(age, "< 1") ~ "Five-Year Age Groups",
     identical(age, "1-4") ~ "Five-Year Age Groups",
-    ## Standard age-adjusted rates are only available for the ten-year age groups
+    ## Standard age-adjusted rates are only available for the ten-year age
+    ## groups
     ## https://wonder.cdc.gov/wonder/help/mcd-provisional.html
     ## #Age-Adjusted%20Rates%20Hints
     all(c(age %in% c("< 1", "1-4"),
@@ -39,13 +40,15 @@ age_option <- function(age, show_age_adjusted, db_num, opts3,
   )
 
   if (identical(age_opt, "Ten-Year Age Groups")) {
+    rlang::arg_match(age, TEN_YEAR_AGE_GROUPS_OPTS, multiple = TRUE)
     for (i in age) {
       opts3[length(opts3) + 1] <- dplyr::recode(i, !!!TEN_YEAR_AGE_GROUPS_KEY)
       names(opts3)[length(opts3)] <- paste0("V_D", db_num, ".V5")
       opts3$`O_age` <-  paste0("D", db_num, ".V5")
     }
     # Add age adjusted column if 2 or more ten-year age groups are requested
-    if ((length(age) >= 2 | identical(age, "All Ages")) & show_age_adjusted) {
+    if ((length(age) >= 2 || identical(age, "All Ages"))
+        && show_age_adjusted) {
       opts3$`O_aar_enable` <- "true"
       opts3$`O_aar` <- "aar_std"
       opts3$`O_aar_CI` <- "true"
@@ -56,6 +59,7 @@ age_option <- function(age, show_age_adjusted, db_num, opts3,
       opts3$`O_aar_SE` <- "false"
     }
   } else if (identical(age_opt, "Five-Year Age Groups")) {
+    rlang::arg_match(age, FIVE_YEAR_AGE_GROUPS_OPTS, multiple = TRUE)
     for (i in age) {
       opts3[length(opts3) + 1] <- dplyr::recode(i, !!!FIVE_YEAR_AGE_GROUPS_KEY)
       names(opts3)[length(opts3)] <-  paste0("V_D", db_num, ".V51")
@@ -63,6 +67,7 @@ age_option <- function(age, show_age_adjusted, db_num, opts3,
       opts3$`O_aar` <- "aar_none"
     }
   } else if (identical(age_opt, "Single-Year Ages")) {
+    rlang::arg_match(age, SINGLE_YEAR_AGES_OPTS, multiple = TRUE)
     for (i in age) {
       opts3[length(opts3) + 1] <- dplyr::recode(i, !!!SINGLE_YEAR_AGES_KEY)
       names(opts3)[length(opts3)] <-  paste0("V_D", db_num, ".V52")
@@ -70,6 +75,7 @@ age_option <- function(age, show_age_adjusted, db_num, opts3,
       opts3$`O_aar` <- "aar_none"
     }
   } else if (identical(age_opt, "Infant Age Groups")) {
+    rlang::arg_match(age, INFANT_AGE_GROUPS_OPTS, multiple = TRUE)
     for (i in age) {
       opts3[length(opts3) + 1] <- dplyr::recode(i, !!!INFANT_AGE_GROUPS_KEY)
       names(opts3)[length(opts3)] <-  paste0("V_D", db_num, ".V6")

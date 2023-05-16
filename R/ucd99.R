@@ -122,47 +122,6 @@ check_params <- function(wonder_url,
   stopifnot(is.logical(show_age_adjusted))
   opts2 <- age_option(age, show_age_adjusted, "76", opts2,
                       group_by_1, group_by_2, group_by_3, group_by_4)
-  # if (all(age %in% TEN_YEAR_AGE_GROUPS_OPTS)) {
-  #   for (i in age) {
-  #     opts2[length(opts2) + 1] <- dplyr::recode(i, !!!TEN_YEAR_AGE_GROUPS_KEY)
-  #     names(opts2)[length(opts2)] <- "V_D76.V5"
-  #     opts2$`O_age` <- "D76.V5"
-  #   }
-  #   # Add age adjusted column if 2 or more ten-year age groups are requested
-  #   if ((length(age) >= 2 || identical(age, "All Ages")) && show_age_adjusted) {
-  #     opts2$`O_aar_enable` <- "true"
-  #     opts2$`O_aar` <- "aar_std"
-  #     opts2$`O_aar_CI` <- "true"
-  #     opts2$`O_aar_SE` <- "true"
-  #   } else {
-  #     opts2$`O_aar` <- "aar_none"
-  #     opts2$`O_aar_CI` <- "false"
-  #     opts2$`O_aar_SE` <- "false"
-  #   }
-  # } else if (all(age %in% FIVE_YEAR_AGE_GROUPS_OPTS)) {
-  #   for (i in age) {
-  #     opts2[length(opts2) + 1] <- dplyr::recode(i, !!!FIVE_YEAR_AGE_GROUPS_KEY)
-  #     names(opts2)[length(opts2)] <- "V_D76.V51"
-  #     opts2$`O_age` <- "D76.V51"
-  #     opts2$`O_aar` <- "aar_none"
-  #   }
-  # } else if (all(age %in% SINGLE_YEAR_AGES_OPTS)) {
-  #   for (i in age) {
-  #     opts2[length(opts2) + 1] <- dplyr::recode(i, !!!SINGLE_YEAR_AGES_KEY)
-  #     names(opts2)[length(opts2)] <- "V_D76.V52"
-  #     opts2$`O_age` <- "D76.V52"
-  #     opts2$`O_aar` <- "aar_none"
-  #   }
-  # } else if (all(age %in% INFANT_AGE_GROUPS_OPTS)) {
-  #   for (i in age) {
-  #     opts2[length(opts2) + 1] <- dplyr::recode(i, !!!INFANT_AGE_GROUPS_KEY)
-  #     names(opts2)[length(opts2)] <- "V_D76.V6"
-  #     opts2$`O_age` <- "D76.V6"
-  #     opts2$`O_aar` <- "aar_none"
-  #   }
-  # } else {
-  #   stop("Invalid age groups")
-  # }
 
   # params for uncertainaty options
   if (!show_totals) {
