@@ -69,15 +69,16 @@ test_that("UCD Injury Intent and Injury Mechanism", {
         ## District of Columbia, 11001 FIPS Code, is a special case
         ## The CDC uses the state code "11"
         if (FIPS == "11001") {
-          FIPS <- "\\(11\\)"
-          if (!any(grepl(paste0("(", FIPS, ")"), df$Notes))) {
+          FIPS <- "11"
+          if (!any(grepl(paste0("\\(", FIPS, "\\)"), df$Notes))) {
             return(FALSE)
           }
         }
       }
       ## Check that no extra counties were included
-      for (FIPS in setdiff(tothewonder:::COUNTIES_FIPS, test_counties)) {
-        if (any(grepl(paste0("(", FIPS, ")"), df$Notes))) {
+      for (FIPS in setdiff(tothewonder:::FIPS_UCD, c(11, test_counties))) {
+        if (any(grepl(paste0("\\(", FIPS, "\\)"), df$Notes))) {
+          print(FIPS)
           return(FALSE)
         }
       }

@@ -660,7 +660,7 @@ mcd_final18 <- function(wonder_url,
                   max(as.numeric(VALID_YEARS))))
     }
     open_item(simple_mcd_form2, opts3, "Open",
-              "F_D157.V9", STATE_FIPS, wonder_url)
+              "F_D157.V9", STATES_FIPS, wonder_url)
     open_item(simple_mcd_form2, opts3, "Open",
               "F_D157.V1", VALID_YEARS, wonder_url)
 

@@ -153,11 +153,11 @@ check_params <- function(wonder_url,
                            paste0("0", residence_fips),
                            as.character(residence_fips)
   )
-  if (!all(residence_fips %in% c("All", STATES_FIPS, COUNTIES_FIPS))) {
+  if (!all(residence_fips %in% c("All", STATES_FIPS, FIPS_UCD))) {
     war_txt <- paste0("Looks like you are using a FIPS code unknown to WONDER.",
                     " This may cause the query to error.")
     warning(war_txt, "\n", paste0(
-      setdiff(residence_fips, c(STATES_FIPS, COUNTIES_FIPS)),
+      setdiff(residence_fips, c(STATES_FIPS, FIPS_UCD)),
       collapse = ", "))
   }
   for (fips in residence_fips) {
@@ -475,7 +475,7 @@ ucd99 <- function(wonder_url,
   }
 
     open_item(SIMPLE_UCD_FORM2, opts2, "Open",
-              "F_D76.V9", STATE_FIPS, wonder_url)
+              "F_D76.V9", STATES_FIPS, wonder_url)
     open_item(SIMPLE_UCD_FORM2, opts2, "Open",
               "F_D76.V1", wonder_years("D76"), wonder_url)
     if (ucd_option == "ICD-10 Codes")

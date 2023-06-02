@@ -78,16 +78,16 @@ test_that("final multiple cause of death function test", {
     ## Check that the CDC data has all the counties we requested
     (\() {
       for (FIPS in test_counties_states) {
-          if (!any(grepl(paste0("(", FIPS, ")"), df$Notes))) {
-            return(FALSE)
+          if (!any(grepl(paste0("\\(", FIPS, "\\)"), df$Notes))) {
             print(FIPS)
+            return(FALSE)
           }
       }
       ## Check that no extra counties were included
-      for (FIPS in setdiff(tothewonder:::COUNTIES_FIPS, test_counties_states)) {
-        if (any(grepl(paste0("(", FIPS, ")"), df$Notes))) {
-          return(FALSE)
+      for (FIPS in setdiff(tothewonder:::FIPS_MCD, test_counties_states)) {
+        if (any(grepl(paste0("\\(", FIPS, "\\)"), df$Notes))) {
           print(FIPS)
+          return(FALSE)
         }
       }
       return(TRUE)

@@ -675,9 +675,9 @@ mcd_provisional <- function(wonder_url,
                                                       key)]
 
     open_item(simple_mcd_form2, opts3, "Open",
-              "F_D176.V9", STATE_FIPS, wonder_url)
+              "F_D176.V9", STATES_FIPS, wonder_url)
     open_item(simple_mcd_form2, opts3, "Open",
-              "F_D176.V79", STATE_FIPS, wonder_url)
+              "F_D176.V79", STATES_FIPS, wonder_url)
 
     VALID_YEARS <- wonder_years("D176")
     if (!identical(period, "*All*") && any(as.numeric(gsub(

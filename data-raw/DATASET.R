@@ -14,27 +14,16 @@ local({
   source("data-raw/DATASET_113.R", local = TRUE)
   source("data-raw/DATASET_mcd.R", local = TRUE)
   source("data-raw/DATASET_FIPS.R", local = TRUE)
-  # read FIPS as character because of leading zero's
-  counties <- read.csv("data-raw/counties.txt",
-                       sep = "\t",
-                       colClasses = c("character")
-  )
-  COUNTIES_FIPS <- counties$County.Code[counties$County.Code != ""]
-  states <- read.csv("data-raw/states.txt",
-                     sep = "\t",
-                     colClasses = c("character")
-  )
-  STATES_FIPS <- states$State.Code[states$State.Code != ""]
 
   usethis::use_data(
     #MCD_SAVE_FORM,
     ALL_AGE_GROUPS_OPTS,
     AUTOPSY_KEY,
     AUTOPSY_OPTS,
-    COUNTIES_FIPS,
     DRUG_ALCOHOL_KEY,
     DRUG_ALCOHOL_OPTS,
     FIPS_MCD,
+    FIPS_UCD,
     FIVE_YEAR_AGE_GROUPS_KEY,
     FIVE_YEAR_AGE_GROUPS_OPTS,
     GENDER_KEY,
@@ -94,7 +83,6 @@ local({
     SINGLE_RACE_6_OPTS,
     SINGLE_YEAR_AGES_KEY,
     SINGLE_YEAR_AGES_OPTS,
-    STATE_FIPS,
     TEN_YEAR_AGE_GROUPS_KEY,
     TEN_YEAR_AGE_GROUPS_OPTS,
     UCD_DOWNLOAD_FORM,
@@ -152,7 +140,7 @@ local({
     CENS_R2,
     CENS_R3,
     CENS_R4,
-    compress    = "xz",
+    compress = "xz",
     version = 3,
     overwrite = TRUE)
 })
