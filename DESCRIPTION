@@ -1,6 +1,6 @@
 Package: tothewonder
 Title: Wrapper for CDC WONDER mortality data
-Version: 0.2.2
+Version: 0.2.3
 Authors@R: 
     c(person(given = "Yukata",
            family = "Pangolin",
